@@ -1,0 +1,42 @@
+@import "../index.scss";
+
+#technical {
+    margin: 5vh auto 0 auto;
+    max-width: 70vw;
+    text-align: left;
+
+    h2 {
+        margin-bottom: 7vh;
+        color: $red;
+    }
+
+    #card-box {
+        display: flex;
+        justify-content: space-around;
+        
+
+        .card {
+            display: flex;
+            justify-content: space-around;
+            flex-direction: column;
+            align-items: center;
+            flex: 0 1 100%;  
+            max-width: 250px;
+
+
+            background-color: $t-black;
+            margin: 1.0rem;
+            padding: 1.0rem;
+
+            img {
+                margin: auto;
+            }
+
+            h3 {
+                color: whitesmoke;
+
+                text-align: center;
+            }            
+        }
+    }
+}

@@ -1,0 +1,102 @@
+@import "../index.scss";
+
+#pages {
+    margin: 10vh auto 0 auto;
+    max-width: 70vw;
+    text-align: left;
+
+    h2 {
+        margin-bottom: 7vh;
+        color: $red;
+    }
+
+    .page {
+        display: flex;
+        justify-items: center;
+        margin: 10vh auto;
+
+        .info {
+            width: 90vw;
+            max-width: 1500px;
+
+            h3 {
+                font-size: 1.8rem;
+                color: $blue;
+            }
+
+            div {
+                display: flex;
+                height: 70%;
+                padding: 0.5rem;
+
+                p {
+                    padding: 2.0rem 1.5rem;
+                    border-radius: 0;
+                    color: black;
+                    text-align: left;
+                    margin: auto 0;
+                    max-width: 700px;
+
+                    //Outline Animation
+                    background-repeat: no-repeat;
+                    background-image: linear-gradient(to right, $blue 100%, $blue 100%),
+                        linear-gradient(to bottom, $blue 100%, $blue 100%),
+                        linear-gradient(to right, $blue 100%, $blue 100%),
+                        linear-gradient(to bottom, $blue 100%, $blue 100%);
+                    background-position: 0 0,
+                        100% 0,
+                        100% 100%,
+                        0 100%;
+
+                    animation: outline 8s cubic-bezier(0.19, 1, 0.22, 1) infinite;
+                }
+            }
+        }
+
+        img {
+            height: 100%;
+            max-height: 400px;
+            max-width: 30vw;
+            padding: 0 1.0rem;
+            margin: 0 2.0rem;
+        }
+    }
+
+    .right-order {
+        flex-direction: row-reverse;
+        text-align: left;
+
+        img {
+            border-right: 2px solid $red;
+
+            // animation: border-pulse-red 3s infinite;
+        }
+
+        .info {
+            div {
+                p {
+                    margin-right: auto;
+                }
+            }
+        }
+    }
+
+    .left-order {
+        flex-direction: row;
+        text-align: right;
+
+        img {
+            border-left: 2px solid $red;
+
+            // animation: border-pulse-red 3s infinite;
+        }
+
+        .info {
+            div {
+                p {
+                    margin-left: auto;
+                }
+            }
+        }
+    }
+}

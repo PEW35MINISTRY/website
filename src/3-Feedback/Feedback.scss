@@ -1,0 +1,194 @@
+@import "../index.scss";
+
+#feedback {
+    position: relative;
+    margin: 0 auto 0 auto;
+    max-width: 70vw;
+    text-align: left;
+
+    h2 {
+        margin-bottom: 2vh;
+        color: $red;
+    }
+
+    #horizontal-wrapper {
+        display: flex;
+        flex-direction: row-reverse;
+        justify-content: space-between;
+
+        label {
+            font-size: 1.0rem;
+            font-weight: 700;
+            letter-spacing: 0.085rem;
+            color: $blue;
+        }
+
+        #prayer-wrapper {
+            height: fit-content;
+            width: 25%;
+            background-color: $t-black;
+            padding: 1.5rem;
+            margin: 0 1.0rem 1.0rem;
+
+            //Outline Animation
+            background-repeat: no-repeat;
+            background-image: linear-gradient(to right, $blue 100%, $blue 100%),
+                linear-gradient(to bottom, $blue 100%, $blue 100%),
+                linear-gradient(to right, $blue 100%, $blue 100%),
+                linear-gradient(to bottom, $blue 100%, $blue 100%);
+            background-position: 0 0,
+                100% 0,
+                100% 100%,
+                0 100%;
+
+            animation: trace 5s cubic-bezier(0.19, 1, 0.22, 1) infinite;
+
+            label {
+                color: $blue;
+            }
+
+            textarea {
+                width: 100%;
+                background-color: $t-white;
+                height: 30vh;
+                border: none;
+                margin-top: 1.0rem;
+                padding: 0;
+            }
+        }
+
+
+        #vertical-wrapper {
+            display: flex;
+            flex-direction: column;
+            width: 70vw;
+            max-width: 800px;
+
+            #submit {
+                color: white;
+                background-color: $red;
+                margin-left: auto;
+
+                &:hover {
+                    background-color: $blue;
+                }
+            }
+
+            .input-box {
+                display: flex;
+                flex-direction: column;
+                margin: 0.5rem 0;
+            }
+
+            input,
+            select,
+            textarea {
+                color: black;
+                border: 1px solid $red;
+                border-radius: $radius;
+                background-color: transparent;
+                padding: 0.4rem 0.7rem;
+            }
+
+            textarea {
+                height: 3.0rem;
+            }
+
+
+
+            .input-select,
+            .input-option {
+                .label-box {
+                    width: 90%;
+                    display: flex;
+                    flex-direction: row;
+                    align-items: baseline;
+
+                    h6 {
+                        font-size: 0.75rem;
+                        color: $t-black;
+                        margin: 0 1.0rem;
+                    }
+                }
+
+                .options-box {
+                    display: flex;
+                    flex-wrap: wrap;
+                    flex-direction: row;
+                    justify-content: flex-start;
+
+                    h4 {
+                        flex: 1 1 2%;
+
+                        font-size: 1.0rem;
+                        color: $t-black;
+                        white-space: nowrap;
+                        text-align: center;
+                        padding: 0.3rem 0.75rem;
+                        border: 1px solid $red;
+                        margin: 0 0.5rem 1.0rem 0.5rem;
+                        width: fit-content;
+
+                        &:hover {
+                            color: whitesmoke;
+                            background-color: $red;
+                            cursor: grab;
+                        }
+
+                    }
+
+                    .selected {
+                        color: whitesmoke;
+                        background-color: $red;
+
+                        &:hover {
+                            color: black;
+                            background-color: $t-white;
+                        }
+                    }
+                }
+
+            }
+
+
+            #general-questions,
+            #role-questions {
+                margin: 1.0rem 0;
+                padding: 0 2.0rem 2.0rem 2.0rem;
+                border: 3px solid transparent;
+                border-top: none;
+                border-top-left-radius: 0;
+                border-top-right-radius: 0;
+            }
+
+            #general-questions {
+                margin-bottom: 0;
+                padding-bottom: 0;
+            }
+
+            #role-selector-box {
+                display: flex;
+                flex-wrap: nowrap;
+                justify-content: space-between;
+
+                button {
+                    color: $t-black;
+                    width: 100%;
+                    white-space: nowrap;
+                    font-weight: 700;
+                    border-bottom: 3px solid transparent;
+                }
+
+                .selected {
+                    color: $red;
+                    border-color: $red;
+                    border-radius: 0;
+                }
+            }
+
+            #role-questions {
+                border-color: $red;
+            }
+        }
+    }
+}
