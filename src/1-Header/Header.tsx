@@ -14,6 +14,7 @@ const Header = () => {
     const [shapeHeight, setShapeHeight] = useState<number>(0);
 
     useEffect(() => {
+        setTimeout(()=> {
         if (topHeaderRef.current && missionRef.current && demoRef.current) {
             let top = missionRef.current.offsetTop + missionRef.current.offsetHeight + 40;
             let height = topHeaderRef.current.offsetHeight - top + 50;
@@ -25,8 +26,8 @@ const Header = () => {
 
             setShapeTop(top);
             setShapeHeight(height);
-        }
-    }, [topHeaderRef, missionRef, demoRef]);
+        }}, 300);
+    }, [topHeaderRef.current, missionRef.current, demoRef.current]);
 
     const updateHandler = () => {
         const card = document.getElementById(CONTENT.update.cardPrompt);

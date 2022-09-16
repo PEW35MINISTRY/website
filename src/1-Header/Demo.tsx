@@ -66,7 +66,7 @@ const Demo = ({passRef}:any) => {
             }
         }
            
-    },30);
+    },20);
 
     return (
         <div className="demo-box" ref={passRef}>
