@@ -1,4 +1,4 @@
-
+//Send Through https://www.tinypng.com && https://www.videosmaller.com/ && https://www.ilovepdf.com/compress_pdf
 export default {
     "logo":require("./0-Assets/logo.png"),
 
@@ -14,74 +14,83 @@ export default {
         "cardPrompt": "The Progress"
     },
 
+    //Guidelines: 600px x 600px == 1:1 ratio
     "demo":[
         {
-            "name":"Protoype",
+            "name":"Mobile",
             "prompt":"See Prototype",
-            "image":require("./0-Assets/mockup.png"),
+            "image":require("./0-Assets/demo-mobile-galaxy.png"),
             "link": "https://www.figma.com/proto/8EUrLeOWsSvU8XZc9bbJMh/Mobile-Design?node-id=1%3A2&scaling=scale-down&page-id=0%3A1&starting-point-node-id=1%3A2"
+        },
+        {
+            "name":"Portal",
+            "prompt":"See Prototype",
+            "image":require("./0-Assets/demo-portal-mac.png"),
+            "link": "https://www.figma.com/proto/HOGcmnYooogGDNlgAxKoSe/DASHBOARD_DESIGN?node-id=119%3A2&scaling=min-zoom&page-id=0%3A1"
         },
         {
             "name":"Video",
             "prompt":"Watch Video",
-            "image":require("./0-Assets/mock-up-hands.png"),
+            "image":require("./0-Assets/demo-video-tablet.png"),
             "link": "https://vimeo.com/243231171?embedded=true&source=vimeo_logo&owner=74329867"
         }        
     ],
 
+    //Guidelines: 425px x 425px == 1:1 ratio
     "cards": [
         {
             "prompt":"The Strategy",
-            "image":require("./0-Assets/mockup-video.jpeg"),
+            "image":require("./0-Assets/card-strategy.jpg"),
             "description":"Have you ever thought about how we learn? We get some teaching/coaching, we practice, and we have some accountability. The Encouraging Prayer phone app will provide a place to begin hearing and developing your prayer language.",
         },
         {
             "prompt":"The Reason",
-            "image":require("./0-Assets/mockup-video.jpeg"),
+            "image":require("./0-Assets/card-reason.jpg"),
             "description":"Therefore, confess your sins to one another and pray for one another, that you may be healed. The prayer of a righteous person is powerful and effective.",
             "footer": "James 5:16 ESV"
         },
         {
             "prompt":"The Progress",
-            "image":require("./0-Assets/mockup-video.jpeg"),
+            "image":require("./0-Assets/card-progress.jpg"),
             "description":"We are just getting started laying out the foundational designs and recruiting a team of talented individuals for this great venture.",
             "header":"Stage 1 of Development:",
         }
     ],
 
+//Guidelines: 400px H x (300pxW)
     "pages":[
         {
-            "image": require("./0-Assets/mockup.png"),
+            "image": require("./0-Assets/1-page-left-partner.png"),
             "title":"Find a Prayer Partner",
             "description":"When you're ready to grow in your confidence in prayer, AND are willing to do the best you can to pray for your partner every day, simply click the \"find a partner\" button and you'll be paired up with someone like you who loves Jesus, is the same age, gender, and at a similar place in their relationship with Jesus."
         },
         {
-            "image": require("./0-Assets/mockup.png"),
+            "image": require("./0-Assets/2-page-right-connect.png"),
             "title":"Connect with a Partner",
             "description":"A simple aspect of growing in any \"language\" is the commitment to practice.  Encouraging Prayer does this through these one on one partnerships, providing opportunity and accountability for daily prayer.  We have found that the number one reason Christians' aren't confident in their prayer is because - they don't pray!"
         },
         {
-            "image": require("./0-Assets/mockup.png"),
+            "image": require("./0-Assets/3-page-left-messaging.png"),
             "title":"Realtime Messaging",
             "description":"Most of us live life in a rush, not cool, but real.  Encouraging Prayer allows you to pray for your partner, hit the \"I Prayed\" button, and then notifies your partner \"Your partner prayed for you\"  AND as your confidence in prayer increases and your relationship with your partner, you can also send & receive specific and meaningful prayers via realtime messaging."
         },
         {
-            "image": require("./0-Assets/mockup.png"),
+            "image": require("./0-Assets/4-page-right-requests.png"),
             "title":"Share Prayer Requests",
             "description":"You can share your prayer request with your one on one partner, a friend on Encouraging Prayer, your youth group circle, or all of them!"
         },
         {
-            "image": require("./0-Assets/mockup.png"),
+            "image": require("./0-Assets/5-page-left-events.png"),
             "title":"Discover Events",
             "description":"Partner churches & ministries will share their events near you.  Search and find opportunities to Pray, Encourage, and Worship with other students near you."
         },
         {
-            "image": require("./0-Assets/mockup.png"),
+            "image": require("./0-Assets/6-page-right-curated.png"),
             "title":"Curated Christian Teachings",
             "description":"Great news - there are thousands of biblically sound teachings out there for you.  The bummer is sorting it all out.  Encouraging Prayer helps by using your registration criteria to suggest teachings, and then refining those suggestions based on your viewing."
         },
         {
-            "image": require("./0-Assets/mockup.png"),
+            "image": require("./0-Assets/page-portal-mac.png"),
             "title":"Youth Leader Portal",
             "description":"Send reminders, prayer requests, encouragement to some or all of your youth group, and get real insights on how much your students are praying, seeking content, and engaging in your events."
         }
@@ -247,15 +256,15 @@ export default {
     "technical":[
         {
             "name":"Mobile App Outline",
-            "file": ""
+            "file": require("./0-Assets/uml-mobile.pdf"),
         },
         {
             "name":"Management Portal Outline",
-            "file": ""
+            "file": require("./0-Assets/uml-portal.pdf"),
         },
         {
             "name":"Server Outline",
-            "file": ""
+            "file": require("./0-Assets/uml-server.pdf"),
         }
     ],
 

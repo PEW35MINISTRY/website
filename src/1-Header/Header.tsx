@@ -5,7 +5,7 @@ import './Header.scss';
 import ABSTRACT from '../0-Assets/square-abstract.png';
 import Demo from './Demo';
 
-const Header = ({ pageRef, feedbackRef, technicalRef }: any) => {
+const Header = () => {
     const topHeaderRef = useRef<null | HTMLDivElement>(null);
     const missionRef = useRef<null | HTMLHeadingElement>(null);
 
@@ -75,7 +75,7 @@ const Header = ({ pageRef, feedbackRef, technicalRef }: any) => {
 
             <div id="shape-rectangle" style={{ height: shapeTop }}></div>
 
-            <div style={{ top: shapeTop, height: shapeHeight }} id='shape'>
+            <div style={{ marginTop: shapeTop, height: shapeHeight }} id='shape'>
                 <svg viewBox="0 0 500 150" preserveAspectRatio="none">
                     <path d="M-2.49,14.31 C274.02,-18.24 292.64,224.51 507.09,115.96 L500.00,0.00 L0.00,0.00 Z"></path>
                 </svg>

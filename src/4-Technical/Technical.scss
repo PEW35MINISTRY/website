@@ -24,12 +24,14 @@
             max-width: 250px;
 
 
+            text-decoration: none;
             background-color: $t-black;
             margin: 1.0rem;
             padding: 1.0rem;
 
             img {
                 margin: auto;
+                animation: zoom-pulse 3s infinite;
             }
 
             h3 {

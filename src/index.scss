@@ -87,7 +87,18 @@ h5,
 h6 {
   font-family: 'Roboto';
   font-weight: 300;
-  font-size: 1.1rem;
+  font-size: 1.15rem;
+}
+
+
+//Animations
+@keyframes zoom-pulse {
+  0%,100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
 }
 
 @keyframes border-pulse-red {

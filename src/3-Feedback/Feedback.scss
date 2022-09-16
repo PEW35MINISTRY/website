@@ -1,5 +1,31 @@
 @import "../index.scss";
 
+#feedback-submitted{
+    width: 100vw;
+    text-align: center;
+
+    h3 {
+        margin: auto;
+        width: fit-content;
+        padding: 0.75rem 1.25rem;
+        background-color: $t-black;
+        color: $blue;
+
+        //Outline Animation
+        background-repeat: no-repeat;
+        background-image: linear-gradient(to right, $blue 100%, $blue 100%),
+            linear-gradient(to bottom, $blue 100%, $blue 100%),
+            linear-gradient(to right, $blue 100%, $blue 100%),
+            linear-gradient(to bottom, $blue 100%, $blue 100%);
+        background-position: 0 0,
+            100% 0,
+            100% 100%,
+            0 100%;
+
+        animation: trace 4s cubic-bezier(0.19, 1, 0.22, 1) infinite;
+    }
+}
+
 #feedback {
     position: relative;
     margin: 0 auto 0 auto;
@@ -48,12 +74,12 @@
             }
 
             textarea {
-                width: 100%;
-                background-color: $t-white;
+                width: calc(100% - 2.0rem);
+                // background-color: $t-white;
                 height: 30vh;
                 border: none;
                 margin-top: 1.0rem;
-                padding: 0;
+                padding: 1.0rem;
             }
         }
 

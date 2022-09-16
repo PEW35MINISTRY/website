@@ -19,8 +19,8 @@ const Feedback = () => {
     }
 
     return (submitted 
-        ? <div id="submitted">
-            <h3>Thank you for your feedback!</h3>
+        ? <div id="feedback-submitted">
+            <h3>Thank you for your feedback{name ? ' ' : ''}{name}!</h3>
         </div>
         : <div id="feedback">
             <h2>Feedback</h2>
