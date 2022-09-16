@@ -1,5 +1,4 @@
 import React, { useState, useEffect, forwardRef, useRef } from 'react';
-import { callbackify } from 'util';
 import CONTENT from '../content';
 
 import './Feedback.scss';
@@ -11,21 +10,19 @@ const Feedback = () => {
 
     const [response, setResponse] = useState<Map<string, string>>(new Map());
 
-    const handleResponse = (prompt: string, value: string) => {
-        setResponse(res => new Map(res.set(prompt, value)));
+    const handleResponse = (UID: string, value: string) => {
+        setResponse(res => new Map(res.set(UID, value)));
 
         console.log(response);
     }
 
-    const getResponse = (prompt: string):string => response.get(prompt) || '';
+    const getResponse = (UID: string):string => response.get(UID) || '';
 
     const handleRoleSelection = (id: number) => {
+        handleResponse('[5]-Role: ', CONTENT.feedback.groups[id].name);
         setRoleID(id);
-        handleResponse('ROLE', CONTENT.feedback.groups[id].name);
     }
     useEffect(()=>handleRoleSelection(roleID),[]);
-
-
 
     const handleSubmit = () => {
         setSubmitted(true);
@@ -33,6 +30,14 @@ const Feedback = () => {
 
 
 
+    }
+
+    const getRoleUID = (id:number, questionID: number):string => {
+        let count = CONTENT.feedback.general.length + 10;
+        for(var i=0; i<id; i++) {
+            count += CONTENT.feedback.groups[i].questions.length;
+        }
+        return '[5]-R-' + CONTENT.feedback.groups[id].name + '-' + String(count + questionID + 1) + ': ' + CONTENT.feedback.groups[roleID].questions[questionID].prompt;
     }
 
     return (submitted 
@@ -44,13 +49,13 @@ const Feedback = () => {
             <h3 id='welcome' className={name ? '' : 'none'}>Welcome {name},</h3>
             <div id="horizontal-wrapper">
                 <div id="prayer-wrapper">
-                    <Paragraph key={'Prayer'} prompt={CONTENT.feedback['prayer-prompt']} value={getResponse(CONTENT.feedback['prayer-prompt'])}
+                    <Paragraph key={`[KEY]-Prayer]`} UID={`[3]-Prayer Request: `} prompt={CONTENT.feedback['prayer-prompt']} valueCallback={getResponse}
                         callBack={handleResponse} />
                 </div>
                 <div id="vertical-wrapper">
                     <div id="general-questions">
                         {
-                            CONTENT.feedback.general.map((question, i) => getInput({ ...question, key: `General Questions: ${i}`, value: getResponse(question.prompt), callBack: handleResponse}))
+                            CONTENT.feedback.general.map((props, i) => getInput({ ...props, key: `[KEY]-G-${i+1}: `, UID: `[4]-G-${i+1}: ${props.prompt}`, valueCallback: getResponse, callBack: handleResponse}))
                         }
 
                         <label htmlFor='Role Selection'>Which Role fits you?</label>
@@ -58,13 +63,13 @@ const Feedback = () => {
 
                     <div id="role-selector-box">
                         {
-                            CONTENT.feedback.groups.map((group, i) => <button key={`Role: ${i}`} className={`group-selector ${i === roleID ? 'selected' : ''}`}
+                            CONTENT.feedback.groups.map((group, i) => <button key={`Role-${i+1}`} className={`group-selector ${i === roleID ? 'selected' : ''}`}
                                 onClick={() => handleRoleSelection(i)}>{group.name}</button>)
                         }
                     </div>
                     <div id="role-questions">
                         {
-                            CONTENT.feedback.groups[roleID].questions.map((question, i) => getInput({ ...question, key: `${CONTENT.feedback.groups[roleID].name} Questions: ${i}`, value: getResponse(question.prompt), callBack: handleResponse}))
+                            CONTENT.feedback.groups[roleID].questions.map((props, i) => getInput({ ...props, key:`[KEY]-`+getRoleUID(roleID, i), UID: getRoleUID(roleID, i), valueCallback: getResponse, callBack: handleResponse}))
                         }
                     </div>
                     <button id="submit" onClick={handleSubmit}>Send Feedback</button>
@@ -77,61 +82,61 @@ export default Feedback;
 
 
 //Input Type Components
-const getInput = ({ ...question }: { key: any, type: string, prompt: string, options?: string[], value?:string, callBack?: any }) => {
-    switch (question.type) {
+const getInput = ({ ...props }: { key: any, UID:string, type: string, prompt: string, options?: string[], valueCallback?: any, callBack?: any }) => {
+    switch (props.type) {
         case 'field':
-            return <Field key={question.key} prompt={question.prompt} value={question.value}
-                callBack={question.callBack} />
+            return <Field key={props.key} UID={props.UID} prompt={props.prompt} valueCallback={props.valueCallback}
+                callBack={props.callBack} />
         case 'paragraph':
-            return <Paragraph key={question.key} prompt={question.prompt} value={question.value}
-                callBack={question.callBack} />
+            return <Paragraph key={props.key} UID={props.UID} prompt={props.prompt} valueCallback={props.valueCallback}
+                callBack={props.callBack} />
         case 'option':
-            return <Option key={question.key} prompt={question.prompt} options={question.options || []} value={question.value}
-                callBack={question.callBack} />
+            return <Option key={props.key} UID={props.UID} prompt={props.prompt} options={props.options || []} valueCallback={props.valueCallback}
+                callBack={props.callBack} />
         case 'select':
-            return <Select key={question.key} prompt={question.prompt} options={question.options || []} value={question.value}
-                callBack={question.callBack} />
+            return <Select key={props.key} UID={props.UID} prompt={props.prompt} options={props.options || []} valueCallback={props.valueCallback}
+                callBack={props.callBack} />
         case 'drop':
-            return <Drop key={question.key} prompt={question.prompt} options={question.options || []} value={question.value}
-                callBack={question.callBack} />
+            return <Drop key={props.key} UID={props.UID} prompt={props.prompt} options={props.options || []} valueCallback={props.valueCallback}
+                callBack={props.callBack} />
     }
 }
 
-const Field = ({ ...props }: { key: any, prompt: string, value?:string, callBack: any }) => {
+const Field = ({ ...props }: {UID:string, prompt: string, valueCallback: any, callBack: any }) => {
 
     return (
-        <div key={props.key} className="input-box input-field">
+        <div key={props.UID} className="input-box input-field">
             <label htmlFor={String(props.prompt)}>{props.prompt}</label>
-            <input name={String(props.prompt)} type="text" value={props.value} 
-                onChange={(e) => props.callBack(props.prompt, e.target.value)} />
+            <input name={String(props.prompt)} type="text" value={props.valueCallback(props.UID)} 
+                onChange={(e) => props.callBack(props.UID, e.target.value)} />
         </div>
     );
 }
 
-const Paragraph = ({ ...props }: { key: any, prompt: string, value?:string, callBack: any }) => {
+const Paragraph = ({ ...props }: {UID:string, prompt: string, valueCallback: any, callBack: any }) => {
 
     return (
-        <div key={props.key} className="input-box input-paragraph">
+        <div key={props.UID} className="input-box input-paragraph">
             <label htmlFor={String(props.prompt)}>{props.prompt}</label>
-            <textarea name={String(props.prompt)} value={props.value} 
-                onChange={(e) => props.callBack(props.prompt, e.target.value)} ></textarea>
+            <textarea name={String(props.prompt)} value={props.valueCallback(props.UID)} 
+                onChange={(e) => props.callBack(props.UID, e.target.value)} ></textarea>
         </div>
     );
 }
 
 //Single Select
-const Option = ({ ...props }: { key: any, prompt: string, options: string[], value?:string, callBack?: any }) => {
+const Option = ({ ...props }: {UID:string, prompt: string, options: string[], valueCallback: any,  callBack?: any }) => {
     const [selected, setSelected] = useState<string | null>(null);
 
-    useEffect(()=>setSelected(props.value || ''), [props.value]);
+    useEffect(()=>setSelected(props.valueCallback(props.UID) || ''), [props.valueCallback(props.UID)]);
 
     const handleSelection = (option: string) => {
         setSelected(option);
-        props.callBack(props.prompt, option);
+        props.callBack(props.UID, option);
     }
 
     return (
-        <div key={props.key} className="input-box input-option">
+        <div key={props.UID} className="input-box input-option">
             <label htmlFor={String(props.prompt)}>{props.prompt}</label>
             <div className='options-box'>
                 {
@@ -146,16 +151,13 @@ const Option = ({ ...props }: { key: any, prompt: string, options: string[], val
 }
 
 //Multiple Select
-const Select = ({ ...props }: { key: any, prompt: string, options: string[], value?:string, callBack?: any }) => {
+const Select = ({ ...props }: {UID:string, prompt: string, options: string[], valueCallback: any,  callBack?: any }) => {
     const [selectedList, setSelectedList] = useState<string[]>([]);
     
     useEffect(()=>{
-        if(props.value?.length)
-            setSelectedList(JSON.parse(props.value || '') || []);
-
-            console.log('Setting', props.value,  selectedList);
-
-    }, [props.value]);
+        if(props.valueCallback(props.UID).length)
+            setSelectedList(JSON.parse(props.valueCallback(props.UID) || '') || []);
+    }, [props.valueCallback(props.UID)]);
 
     const handleSelection = (option: string) => {
         const list = [...selectedList];
@@ -165,12 +167,11 @@ const Select = ({ ...props }: { key: any, prompt: string, options: string[], val
             list.push(option);
 
             setSelectedList([...list]);
-        props.callBack(props.prompt, JSON.stringify(list));
-        console.log(option, '=>', list);
+        props.callBack(props.UID, JSON.stringify(list));
     }
 
     return (
-        <div key={props.key} className="input-box input-select">
+        <div key={props.UID} className="input-box input-select">
             <div className='label-box'>
                 <label htmlFor={String(props.prompt)}>{props.prompt}</label>
                 <h6>Select Multiple</h6>
@@ -187,13 +188,13 @@ const Select = ({ ...props }: { key: any, prompt: string, options: string[], val
     );
 }
 
-const Drop = ({ ...props }: { key: any, prompt: string, options: string[], value?:string, callBack?: any }) => {
+const Drop = ({ ...props }: {UID:string, prompt: string, options: string[], valueCallback: any,  callBack?: any }) => {
 
     return (
-        <div key={props.key} className="input-box input-drop">
+        <div key={props.UID} className="input-box input-drop">
             <label htmlFor={String(props.prompt)}>{props.prompt}</label>
-            <select name={String(props.prompt)} value={props.value}
-                onChange={(e) => props.callBack(props.prompt, e.target.value)}>
+            <select name={String(props.prompt)} value={props.valueCallback(props.UID)}
+                onChange={(e) => props.callBack(props.UID, e.target.value)}>
                 {
                     props.options.map((option, i) =>
                         <option key={i} value={option} >{option}</option>

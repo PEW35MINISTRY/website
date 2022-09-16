@@ -12,7 +12,7 @@ const Technical = () => {
             <h2>Technical Design</h2>
             <div id="card-box">
                 {CONTENT.technical.map((tech,i) => 
-                    <a className="card" href={tech.file} >
+                    <a key={i} className="card" href={tech.file} >
                         <img src={DOWNLOAD} alt={tech.name} />
                         <h3>{tech.name}</h3>
                         </a>
