@@ -1,100 +1,168 @@
 @import "../index.scss";
 
 #pages {
-    margin: 10vh auto 0 auto;
-    max-width: 70vw;
-    text-align: left;
+    margin: 2vh 5vw 0 5vw;
+    // max-width: 1200px;
+    text-align: center;
+
+    @media screen and (max-width: 991px) {
+        margin-top: 2vh;
+        margin-bottom: 25vh;
+        max-width: 95vw;
+        text-align: center;
+    }
 
     h2 {
+        text-align: left;
         margin-bottom: 7vh;
         color: $red;
     }
 
-    .page {
-        display: flex;
-        justify-items: center;
-        margin: 10vh auto;
+    #pages-wrapper {
+        width: 100%;
+        margin: 0 auto;
 
-        .info {
-            width: 90vw;
-            max-width: 1500px;
+        .page {
+            display: flex;
+            justify-items: center;
+            margin: 5vh 2.0rem;
+            // width: 90vw;
+            max-width: 1200px;
 
-            h3 {
-                font-size: 1.8rem;
-                color: $blue;
+            .info {
+
+                h3 {
+                    font-size: 1.8rem;
+                    color: $blue;
+                    padding: 0.25rem 1.0rem;
+                }
+
+                div {
+                    display: flex;
+                    height: 70%;
+                    padding: 0.5rem;
+
+                    p {
+                        padding: 2.0rem 1.5rem;
+                        border-radius: 0;
+                        color: black;
+                        text-align: left;
+                        margin: auto 0;
+                        max-width: 700px;
+
+                        //Outline Animation
+                        background-repeat: no-repeat;
+                        background-image: linear-gradient(to right, $blue 100%, $blue 100%),
+                            linear-gradient(to bottom, $blue 100%, $blue 100%),
+                            linear-gradient(to right, $blue 100%, $blue 100%),
+                            linear-gradient(to bottom, $blue 100%, $blue 100%);
+                        background-position: 0 0,
+                            100% 0,
+                            100% 100%,
+                            0 100%;
+
+                        animation: outline 8s cubic-bezier(0.19, 1, 0.22, 1) infinite;
+                    }
+                }
             }
 
-            div {
-                display: flex;
-                height: 70%;
-                padding: 0.5rem;
+            img {
+                height: 100%;
+                max-height: 400px;
+                max-width: 30vw;
+                max-width: 400px;
+                padding: 0 1.0rem;
+                margin: 0 2.0rem;
+            }
+        }
 
-                p {
-                    padding: 2.0rem 1.5rem;
-                    border-radius: 0;
-                    color: black;
-                    text-align: left;
-                    margin: auto 0;
+
+        .right-order {
+            flex-direction: row-reverse;
+            text-align: left;
+            margin-right: auto;
+
+            img {
+                border-right: 2px solid $red;
+
+                // animation: border-pulse-red 3s infinite;
+            }
+
+            .info {
+                div {
+                    p {
+                        margin-right: auto;
+                    }
+                }
+            }
+        }
+
+        .left-order {
+            flex-direction: row;
+            text-align: right;
+            margin-left: auto;
+
+            @media screen and (max-width: 991px) {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            img {
+                border-left: 2px solid $red;
+
+                // animation: border-pulse-red 3s infinite;
+            }
+
+            .info {
+                div {
+                    p {
+                        margin-left: auto;
+                    }
+                }
+            }
+        }
+
+        @media screen and (max-width: 991px) {
+
+            .right-order,
+            .left-order {
+                position: relative;
+                flex-direction: column-reverse;
+                text-align: center;
+                margin: 5vh auto;
+
+                .info {
+                    position: relative;
+                    z-index: 2;
+                    margin: auto auto 0 auto;
                     max-width: 700px;
+                    max-width: 85vw;
 
-                    //Outline Animation
-                    background-repeat: no-repeat;
-                    background-image: linear-gradient(to right, $blue 100%, $blue 100%),
-                        linear-gradient(to bottom, $blue 100%, $blue 100%),
-                        linear-gradient(to right, $blue 100%, $blue 100%),
-                        linear-gradient(to bottom, $blue 100%, $blue 100%);
-                    background-position: 0 0,
-                        100% 0,
-                        100% 100%,
-                        0 100%;
+                    background-color: $t-black;
 
-                    animation: outline 8s cubic-bezier(0.19, 1, 0.22, 1) infinite;
+                    h3 {
+                        text-align: right;
+                    }
+
+                    div {
+                        p {
+                            color: white;
+                        }
+                    }
                 }
-            }
-        }
 
-        img {
-            height: 100%;
-            max-height: 400px;
-            max-width: 30vw;
-            padding: 0 1.0rem;
-            margin: 0 2.0rem;
-        }
-    }
+                img {
+                    position: relative;
+                    z-index: 1;
+                    border: none;
+                    margin: 0 auto;
+                    max-width: 80vw;
+                    overflow-y: visible;
+                    margin-bottom: -150px;
 
-    .right-order {
-        flex-direction: row-reverse;
-        text-align: left;
-
-        img {
-            border-right: 2px solid $red;
-
-            // animation: border-pulse-red 3s infinite;
-        }
-
-        .info {
-            div {
-                p {
-                    margin-right: auto;
-                }
-            }
-        }
-    }
-
-    .left-order {
-        flex-direction: row;
-        text-align: right;
-
-        img {
-            border-left: 2px solid $red;
-
-            // animation: border-pulse-red 3s infinite;
-        }
-
-        .info {
-            div {
-                p {
-                    margin-left: auto;
+                    @media screen and (max-width: 574px) {
+                        margin-bottom: -40%;
+                    }
                 }
             }
         }

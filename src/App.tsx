@@ -11,7 +11,7 @@ import Footer from './5-Footer/Footer';
 function App() {
   
   return (
-    <div className="App">
+    <div id="App">
       <Header />
       <Pages />
       <Feedback />

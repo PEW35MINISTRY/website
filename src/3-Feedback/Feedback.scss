@@ -28,9 +28,13 @@
 
 #feedback {
     position: relative;
-    margin: 0 auto 0 auto;
-    max-width: 70vw;
+    margin: 0 5vw;
+    max-width: 1300px;
     text-align: left;
+
+    @media screen and (max-width: 991px) {
+        max-width: 90vw;
+      }
 
     h2 {
         margin-bottom: 2vh;
@@ -83,11 +87,26 @@
             }
         }
 
+        @media screen and (max-width: 991px) {
+            flex-direction: column;
+
+            #prayer-wrapper {
+                width: 90%;
+                max-height: 100px;
+                padding: 1rem;
+                margin: 0 0 0;
+
+                textarea {
+                    height: 100%;
+                }
+            }
+          }
+
 
         #vertical-wrapper {
             display: flex;
             flex-direction: column;
-            width: 70vw;
+            // width: 70vw;
             max-width: 800px;
 
             #submit {
@@ -179,7 +198,6 @@
 
             #general-questions,
             #role-questions {
-                margin: 1.0rem 0;
                 padding: 0 2.0rem 2.0rem 2.0rem;
                 border: 3px solid transparent;
                 border-top: none;
@@ -196,11 +214,12 @@
                 display: flex;
                 flex-wrap: nowrap;
                 justify-content: space-between;
+                width: 100%;
 
                 button {
                     color: $t-black;
                     width: 100%;
-                    white-space: nowrap;
+                    white-space: wrap;
                     font-weight: 700;
                     border-bottom: 3px solid transparent;
                 }

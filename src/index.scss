@@ -6,7 +6,7 @@ $t-white: rgba(255, 255, 255, 0.2);
 $radius: 4px;
 
 html {
-  font-size: 25px;
+  font-size: 22px;
   color: white;
   font-family: 'Roboto';
   font-weight: 300;
@@ -15,13 +15,25 @@ html {
   scroll-behavior: smooth;
   overflow-x: hidden;
 
-  @media screen and (min-width: 760px) {
-    font-size: 17px;
+  @media screen and (max-width: 1200px) {
+    font-size: 18px;
+  }
+
+  @media screen and (max-width: 991px) {
+    font-size: 15px;
+  }
+
+  @media screen and (max-width: 576px) {
+    font-size: 13px;
   }
 }
 
 body {
   margin: 0;
+}
+
+#App {
+  // margin: auto;
 }
 
 none {

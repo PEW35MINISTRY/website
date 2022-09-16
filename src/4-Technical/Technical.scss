@@ -1,8 +1,8 @@
 @import "../index.scss";
 
 #technical {
-    margin: 5vh auto 0 auto;
-    max-width: 70vw;
+    margin: 2vh 5vw 0 5vw;
+    // max-width: 70vw;
     text-align: left;
 
     h2 {
@@ -13,6 +13,8 @@
     #card-box {
         display: flex;
         justify-content: space-around;
+        flex-wrap: wrap;
+        margin: auto;
         
 
         .card {

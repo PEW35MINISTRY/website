@@ -18,9 +18,13 @@
         align-items: center;
         width: 100%;
         margin-top: auto;
-
+        
         position: relative;
         z-index: 2;
+
+        @media screen and (max-width: 991px) {
+            flex-direction: column;
+          }
 
         #pew35-logo {
             width: 10vw;
@@ -28,13 +32,22 @@
             object-fit: cover;
             object-position: center;
 
+            @media screen and (max-width: 991px) {
+                min-width: 100px;
+                margin-bottom: 1.5rem;
+              }
         }
 
         #references {
+            position: relative;
             z-index: 2;
             display: flex;
             flex-direction: column;
             justify-content: flex-start;
+
+            @media screen and (min-width: 1200px) {
+                top: 2.0rem;
+            }
 
             h3 {
                 font-size: 1.8rem;
@@ -46,6 +59,7 @@
 
                 h4 {
                     color: whitesmoke;
+                    margin: 0.15rem;
                 }
 
                 &:hover {
@@ -62,6 +76,7 @@
         bottom: 1.0rem;
 
         height: 100px;
+        max-width: 90vw;
         object-fit: contain;
         object-position: center;
     }
@@ -70,13 +85,15 @@
         position: absolute;
         height: 40vh;
 
+        //Height of #footer-rectangle and #footer-shape need to add to Height of #footer
         #footer-rectangle {
+            position: relative;
             background-color: $red;
             border-radius: 0;
             z-index: 0;
             bottom: 0;
             width: 100vw;
-            height: 12vh;
+            height: 20vh;
         }
 
         #footer-shape {
@@ -84,8 +101,8 @@
             z-index: 1;
             background-color: transparent;
             overflow: hidden;
-            margin-bottom: -1px;
-            height: 30vh;
+            // margin-bottom: -1px;
+            height: 25vh;
 
             svg {
                 height: 100%;

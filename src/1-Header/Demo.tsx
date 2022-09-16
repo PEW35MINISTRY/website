@@ -4,7 +4,7 @@ import CONTENT from '../content';
 import './Header.scss'; 
 import PLAY from '../0-Assets/icon-play.png';
 
-const Demo = () => {
+const Demo = ({passRef}:any) => {
     const [autoPlay, setAutoPlay] = useState<boolean>(true);
     const [firstDemoActive, setFirstDemoActive] = useState<boolean>(true);
     const [firstID, setFirstID] = useState<number>(0);
@@ -69,7 +69,7 @@ const Demo = () => {
     },30);
 
     return (
-        <div className="demo-box">
+        <div className="demo-box" ref={passRef}>
                 <a href={CONTENT.demo[getActiveID()].link} onMouseEnter={()=>setAutoPlay(false)} onMouseLeave={()=>setAutoPlay(true)}>
                     <div className="image-wrapper" style={{position: 'relative', opacity: firstOpacity, zIndex: firstDemoActive ? 2 : 1}}>
                         <img src={String(CONTENT.demo[firstID].image)} alt={CONTENT.demo[firstID].prompt} style={{transform: `scale(${firstScale})`}}/>

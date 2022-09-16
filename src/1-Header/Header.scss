@@ -6,7 +6,7 @@
     padding: 0;
     margin: 0;
 
-    
+
 
     #abstract {
         position: absolute;
@@ -15,7 +15,7 @@
         width: 80vw;
         object-fit: cover;
         opacity: 0.3;
-        
+
     }
 
     #top-row {
@@ -26,11 +26,17 @@
         flex-direction: row;
         justify-content: space-between;
         padding: 2.0rem 5vw;
+        width: 90vw;
+
+        @media screen and (max-width: 991px) {
+            flex-direction: column;
+        }
 
         #left-side {
             position: relative;
             z-index: 3;
-            
+            width: fit-content;
+
 
             .logo-box {
                 z-index: 10;
@@ -38,29 +44,45 @@
                 // opacity: 1.0;
                 display: flex;
                 flex-direction: row;
-                align-items: baseline;
+                // align-items: baseline;
+                margin-top: 1.0rem;
 
                 img {
-                    height: 10rem;
+                    height: 15vw;
                 }
+
                 h1 {
-                    font-size: 6rem;
+                    font-size: 5rem;
                     color: white;
                     white-space: wrap;
+                    
+                    @media screen and (max-width: 1200px) {
+                        font-size: 3.5rem;
+                    }
 
                 }
             }
 
             .mission {
                 position: relative;
-                left: 5vw;
+                left: 2vw;
                 color: $blue;
                 font-size: 3rem;
                 letter-spacing: 0.2rem;
-                width: 50vw;
+                // width: 50vw;
                 max-width: 800px;
                 margin: 2rem;
-        
+
+                @media screen and (max-width: 1200px) {
+                    font-size: 2rem;
+                    margin: 0;
+                    left: 0;
+
+                    @media screen and (max-width: 991px) {
+                        width: 90vw;
+                    }
+                }
+
                 .goal {
                     position: relative;
                     left: 0.25rem;
@@ -84,7 +106,7 @@
                 border-bottom-left-radius: 0;
                 border: 4px solid $blue;
                 border-left: none;
-                
+
                 animation: border-pulse-blue 3s infinite;
 
                 h3 {
@@ -103,7 +125,7 @@
                     background-color: $red;
                     border: 2px solid transparent;
                     color: white;
-                    margin: 0 0.5rem;                    
+                    margin: 0 0.5rem;
 
                     &:hover {
                         background-color: $t-black;
@@ -130,7 +152,8 @@
             z-index: 2;
             top: 5vh;
             // right: 5vw;
-            width: 25vw;
+            width: 40vw;
+            max-width: 600px;
             // height: 30vw;
             text-align: center;
             padding: 1.0rem;
@@ -138,14 +161,17 @@
             flex-direction: column;
             justify-content: center;
             // overflow: hidden;
+            
+            @media screen and (max-width: 991px) {
+                width: 90vw;
+                margin: auto;
+            }
 
-    
-    
             #demo-prompt {
                 z-index: 5;
                 position: absolute;
                 top: 40%;
-                left: 30%;
+                right: 20%;
                 background-color: $t-black;
                 color: white;
                 padding: 0.5rem 1rem;
@@ -153,34 +179,35 @@
                 animation: border-pulse-blue 2s infinite;
                 border: 2px solid transparent;
                 font-size: 1.4rem;
-                
+
                 #icon {
                     width: 2.0rem;
                     height: 2.0rem;
                 }
             }
 
-            
+
 
             a {
                 // box-shadow: 10px 15px $t-black;
-                text-decoration: none;  
+                text-decoration: none;
                 height: 50vh;
                 display: flex;
                 // flex: 1 1 100%;  
                 // overflow: hidden; 
-                object-fit: cover; 
-                
-                .image-wrapper{
+                object-fit: cover;
+                margin: auto;
+
+                .image-wrapper {
                     // overflow: hidden; 
-                    object-fit: cover; 
+                    object-fit: cover;
                     height: 50vh;
                     border-radius: 0;
 
                     img {
                         height: 100%;
                         width: 100%;
-                        object-fit: cover; 
+                        object-fit: cover;
 
                         /*Inline Styles Calculated in JavaScript
                         position
@@ -189,12 +216,12 @@
                         Scale
                         */
                     }
-                }                
-                
+                }
+
             }
 
-            
-    
+
+
             #demo-menu {
                 position: relative;
                 z-index: 4;
@@ -207,16 +234,16 @@
                     color: $t-black;
                     letter-spacing: 0.1rem;
                 }
-        
+
                 .active {
                     color: $blue;
                 }
-    
+
                 .divider-right {
                     border-radius: 0;
                     border-right: 1px solid $t-black;
                 }
-            }          
+            }
         }
     }
 
@@ -225,19 +252,27 @@
         flex-direction: row;
         // align-items: stretch;
         justify-content: space-between;
-        margin: 2.0rem 10vw;
+        
+        margin: 2.0rem;
+
+        @media screen and (max-width: 1200px) {
+            margin-top: 10vh;
+            flex-direction: column;
+        }
 
         .card {
             max-width: 400px;
-            margin: 0 2.0rem;
+            margin: 0 1.0rem;
 
             border-radius: 1.75rem;
             background-color: black;
             overflow: hidden;
             display: flex;
-            flex: 1 1 100%;  
+            flex: 1 1 100%;
 
-            
+            @media screen and (max-width: 1200px) {
+                margin: 3vh auto;
+            }
 
             .description {
                 position: relative;
@@ -248,51 +283,51 @@
                 font-size: 1.2rem;
                 line-height: 1.4em;
                 letter-spacing: 0.08em;
-                
+
                 display: flex;
                 flex-direction: column;
                 justify-content: space-between;
 
-            .description-inside {
-                display: flex;
-                flex-direction: column;
-                justify-content: space-between;
-                padding: 3.0rem 1.5rem;
-                opacity: 0;
+                .description-inside {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: space-between;
+                    padding: 3.0rem 1.5rem;
+                    opacity: 0;
 
-                .header {
-                    color: $blue;
-                    text-align: left;
-                    margin-bottom: 2.0rem;
-                    font-size: 1.1em;
+                    .header {
+                        color: $blue;
+                        text-align: left;
+                        margin-bottom: 2.0rem;
+                        font-size: 1.1em;
+                    }
+
+                    .footer {
+                        color: $blue;
+                        text-align: right;
+                        margin-top: 1.0rem;
+                        font-size: 0.8em;
+                    }
                 }
 
-                .footer {
-                    color: $blue;
-                    text-align: right;
-                    margin-top: 1.0rem;
-                    font-size: 0.8em;
+                .prompt {
+                    position: relative;
+                    z-index: 4;
+                    bottom: 25%;
+                    padding: 0.5rem;
+                    margin-top: 2.0rem;
                 }
-            }
 
-            .prompt {
-                position: relative;
-                z-index: 4;
-                bottom: 25%;
-                padding: 0.5rem;
-                margin-top: 2.0rem;
-            }
-
-            .prompt-footer {
-                position: relative;
-                bottom: 0;
-                border-top: 2px solid $blue;
-                border-radius: 0;
-                color: $blue;
-                padding: 0.5rem;
-                margin-top: 2.0rem;
-                margin-bottom: 1.0rem;
-            }
+                .prompt-footer {
+                    position: relative;
+                    bottom: 0;
+                    border-top: 2px solid $blue;
+                    border-radius: 0;
+                    color: $blue;
+                    padding: 0.5rem;
+                    margin-top: 2.0rem;
+                    margin-bottom: 1.0rem;
+                }
 
             }
 
@@ -302,7 +337,8 @@
                 width: 100%;
                 height: 100%;
                 object-fit: cover;
-            }            
+                margin: auto;
+            }
         }
     }
 
@@ -312,12 +348,13 @@
         top: 1rem;
         right: 2rem;
 
-        a, button {
+        a,
+        button {
             color: white;
             text-decoration: none;
             font-size: 1.5rem;
-            padding: 0.5rem 1.0rem;   
-            margin: auto;       
+            padding: 0.5rem 1.0rem;
+            margin: auto;
         }
 
         a:hover {
@@ -326,7 +363,7 @@
             text-decoration-color: $blue;
             cursor: pointer;
         }
-        
+
         button {
             background-color: $blue;
             color: white;
@@ -337,7 +374,15 @@
                 cursor: pointer;
             }
         }
-    } 
+
+
+        @media screen and (max-width: 575px) {
+            .hide-mobile {
+                display: none;
+            }
+        }
+
+    }
 
     #shape-rectangle {
         background-color: $red;
@@ -346,14 +391,14 @@
         z-index: 0;
         top: 0;
         left: 0;
-        width: 100vw;
+        width: 100%;
     }
 
     #shape {
         @extend #shape-rectangle;
         background-color: transparent;
         overflow: hidden;
-        margin-top: -1px;
+        margin-top: -5px;
 
         svg {
             height: 100%;

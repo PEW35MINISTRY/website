@@ -1,7 +1,7 @@
-import React, {useState, useEffect, forwardRef, useRef} from 'react';
+import React, { useState, useEffect, forwardRef, useRef } from 'react';
 import CONTENT from '../content';
 
-import './Pages.scss'; 
+import './Pages.scss';
 
 const Pages = () => {
 
@@ -9,17 +9,19 @@ const Pages = () => {
     return (
         <div id="pages">
             <h2>Key Features</h2>
-            {CONTENT.pages.map((page,i) => 
-            <div className={`page ${(i%2) ? 'left-order' : 'right-order'}`} >
-                <div className="info">
-                    <h3>{page.title}</h3>
-                    <div>
-                        <p >{page.description}</p>
+            <div id="pages-wrapper">
+                {CONTENT.pages.map((page, i) =>
+                    <div className={`page ${(i % 2) ? 'left-order' : 'right-order'}`} >
+                        <div className="info">
+                            <h3>{page.title}</h3>
+                            <div>
+                                <p >{page.description}</p>
+                            </div>
+                        </div>
+                        <img src={String(page.image)} alt={page.title} />
                     </div>
-                </div>
-                <img src={String(page.image)} alt={page.title} />
+                )}
             </div>
-            )}
         </div>
     );
 }
