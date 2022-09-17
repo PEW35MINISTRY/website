@@ -7,7 +7,7 @@ import './Feedback.scss';
 const Feedback = () => {
     const [submitted, setSubmitted] = useState<boolean>(false);
     const [email, setEmail] = useState<string>();
-    const [name, setName] = useState<string>('Steve');
+    const [name, setName] = useState<string>();
     const [roleID, setRoleID] = useState<number>(1);
     const reCaptchaRef = useRef<ReCAPTCHA | null>(null);
 
