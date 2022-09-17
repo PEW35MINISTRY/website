@@ -96,12 +96,17 @@
 
         @media screen and (max-width: 991px) {
             flex-direction: column;
+            align-items: center;
 
             #prayer-wrapper {
                 width: 90%;
                 max-height: 100px;
                 padding: 1rem;
                 margin: 0 0 0;
+
+                .label-box {
+                    text-align: left;
+                }
 
                 textarea {
                     height: 100%;

@@ -7,7 +7,6 @@
     margin: 0;
 
 
-
     #abstract {
         position: absolute;
         top: 0;
@@ -19,15 +18,14 @@
     }
 
     #top-row {
-        position: relative;
-        z-index: 2;
+        // position: absolute;
+        // z-index: 2;
         border-radius: 0;
         display: flex;
         flex-direction: row;
         justify-content: space-between;
         padding: 2.0rem 5vw;
         width: 90vw;
-        overflow: visible;
 
         @media screen and (max-width: 991px) {
             flex-direction: column;
@@ -392,6 +390,7 @@
     }
 
     #shape-rectangle {
+        
         background-color: $red;
         border-radius: 0;
         position: absolute;
@@ -403,6 +402,7 @@
 
     #shape {
         @extend #shape-rectangle;
+        position: absolute;
         background-color: transparent;
         overflow: hidden;
         margin-top: -5px;
