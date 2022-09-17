@@ -49,9 +49,9 @@ const Feedback = () => {
 
         if (email && validateEmail(email) && reCaptchaRef.current != null) {
             //Extract Name
-            const emailNameRegex:RegExpExecArray|null = /+?(?=@)/.exec(email);
+            const emailNameRegex:RegExpExecArray|null = new RegExp(/.+(?=@)/).exec(email);
             const emailName:string = emailNameRegex ? emailNameRegex[0] : '';
-            
+
             //Format Body
             const questions: string[] = Array.from(response, (prompt, result) => `${prompt}\n${result}`);
             const body = questions.sort((a: string, b: string) => (a.localeCompare(b))).join('\n');
