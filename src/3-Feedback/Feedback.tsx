@@ -7,12 +7,13 @@ import './Feedback.scss';
 const Feedback = () => {
     const [submitted, setSubmitted] = useState<boolean>(false);
     const [email, setEmail] = useState<string>();
-    const [name, setName] = useState<string>();
+    const [name, setName] = useState<string>('Steve');
     const [roleID, setRoleID] = useState<number>(1);
     const reCaptchaRef = useRef<ReCAPTCHA | null>(null);
 
     const [response, setResponse] = useState<Map<string, string>>(new Map());
 
+    //Responses Mapping
     const handleResponse = (UID: string, value: string) => {
         setResponse(res => new Map(res.set(UID, value)));
 
@@ -21,6 +22,19 @@ const Feedback = () => {
 
     const getResponse = (UID: string): string => response.get(UID) || '';
 
+    const handleRoleSelection = (id: number) => {
+        handleResponse('[5]-Role: ', CONTENT.feedback.groups[id].name);
+        setRoleID(id);
+    }
+
+    //Initial Posting to Response Map: onLoad
+    useEffect(() => {
+        if (email) handleResponse('[1]-Email: ', email);
+        if (name) handleResponse('[2]-Name: ', name);
+        handleRoleSelection(roleID);
+    }, [name]);
+
+    //Email Handling
     const validateEmail = (value: string): boolean => /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()\.,;\s@\"]+\.{0,1})+([^<>()\.,;:\s@\"]{2,}|[\d\.]+))$/.test(value);
 
     const handleEmail = (UID: string, value: string) => {
@@ -34,17 +48,7 @@ const Feedback = () => {
         else return 'INVALID EMAIL';
     }
 
-    const handleRoleSelection = (id: number) => {
-        handleResponse('[5]-Role: ', CONTENT.feedback.groups[id].name);
-        setRoleID(id);
-    }
-
-    useEffect(() => {
-        if (email) handleResponse('[1]-Email: ', email);
-        if (name) handleResponse('[2]-Name: ', name);
-        handleRoleSelection(roleID);
-    }, [name]);
-
+    //Form Submitting
     const handleSubmit = async (event: any) => {
         event.preventDefault();
 
@@ -96,7 +100,7 @@ const Feedback = () => {
         </div>
         : <div id="feedback">
             <h2>Feedback</h2>
-            <h3 id='welcome' className={name ? '' : 'none'}>Welcome {name},</h3>
+            <h3 id='welcome' className={(name && name.length) ? '' : 'none'}>Welcome {name},</h3>
             <div id="horizontal-wrapper">
                 <div id="prayer-wrapper">
                     <Paragraph key={`[KEY]-Prayer]`} UID={`[3]-Prayer Request: `} prompt={CONTENT.feedback['prayer-prompt']} valueCallback={getResponse}

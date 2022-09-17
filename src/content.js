@@ -72,7 +72,7 @@ export default {
         {
             "image": require("./0-Assets/3-page-left-messaging.png"),
             "title":"Realtime Messaging",
-            "description":"Most of us live life in a rush, not cool, but real.  Encouraging Prayer allows you to pray for your partner, hit the \"I Prayed\" button, and then notifies your partner \"Your partner prayed for you\"  AND as your confidence in prayer increases and your relationship with your partner, you can also send & receive specific and meaningful prayers via realtime messaging."
+            "description":"Most of us live life in a rush, not cool, but real.  Encouraging Prayer allows you to pray for your partner, hit the \"I Prayed\" button, and then notifies your partner \"Your partner prayed for you.\"  Also, as your confidence in prayer increases and your relationship with your partner develop, you can also send & receive specific and meaningful prayers via realtime messaging."
         },
         {
             "image": require("./0-Assets/4-page-right-requests.png"),
