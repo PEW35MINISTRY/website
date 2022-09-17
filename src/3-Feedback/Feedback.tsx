@@ -126,7 +126,7 @@ const Feedback = () => {
                     <div id="submit-box">
                     <ReCAPTCHA
                         // className={recaptchaClass}
-                        sitekey={process.env.REACT_APP_emailServiceId || 'Key'}
+                        sitekey={process.env.REACT_APP_recaptchaKey || 'Key'}
                         // size="invisible"
                         ref={reCaptchaRef}
                         />
