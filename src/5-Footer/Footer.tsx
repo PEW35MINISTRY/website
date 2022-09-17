@@ -10,7 +10,9 @@ const Footer = () => {
     return (
         <div id="footer" >
             <div id="wrapper" >
-                <img id="pew35-logo" src={PEW35LOGO} alt="Pew35" />
+                <a href='https://pew35.org/'>
+                    <img id="pew35-logo" src={PEW35LOGO} alt="Pew35" />
+                </a>
                 <div id="references">
                     <h3>{CONTENT.information.title}</h3>
                     {

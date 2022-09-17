@@ -10,7 +10,7 @@
     justify-content: space-between;
     justify-items: baseline;
     align-items: flex-start;
-    
+
     #wrapper {
         display: flex;
         flex-direction: row;
@@ -18,24 +18,28 @@
         align-items: center;
         width: 100%;
         margin-top: auto;
-        
+
         position: relative;
         z-index: 2;
 
         @media screen and (max-width: 991px) {
             flex-direction: column;
-          }
+        }
 
-        #pew35-logo {
-            width: 10vw;
-            min-width: 150px;
-            object-fit: cover;
-            object-position: center;
+        a {
+            text-decoration: none;
 
-            @media screen and (max-width: 991px) {
-                min-width: 100px;
-                margin-bottom: 1.5rem;
-              }
+            #pew35-logo {
+                width: 10vw;
+                min-width: 150px;
+                object-fit: cover;
+                object-position: center;
+
+                @media screen and (max-width: 991px) {
+                    min-width: 100px;
+                    margin-bottom: 1.5rem;
+                }
+            }
         }
 
         #references {
@@ -63,8 +67,8 @@
                 }
 
                 &:hover {
-                    h4 {                   
-                    color: $blue;
+                    h4 {
+                        color: $blue;
                     }
                 }
             }

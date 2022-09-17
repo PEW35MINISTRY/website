@@ -1,5 +1,6 @@
 import React, { useState, useEffect, forwardRef, useRef } from 'react';
 import EMAILJS from '@emailjs/browser';
+import ReCAPTCHA from 'react-google-recaptcha';
 import CONTENT from '../content';
 import './Feedback.scss';
 
@@ -8,6 +9,7 @@ const Feedback = () => {
     const [email, setEmail] = useState<string>();
     const [name, setName] = useState<string>();
     const [roleID, setRoleID] = useState<number>(1);
+    const reCaptchaRef = useRef<ReCAPTCHA|null>(null);
 
     const [response, setResponse] = useState<Map<string, string>>(new Map());
 
@@ -36,25 +38,31 @@ const Feedback = () => {
         handleResponse('[5]-Role: ', CONTENT.feedback.groups[id].name);
         setRoleID(id);
     }
+    
     useEffect(() => {
         if (email) handleResponse('[1]-Email: ', email);
         if (name) handleResponse('[2]-Name: ', name);
         handleRoleSelection(roleID);
     }, [name]);
 
-    const handleSubmit = (event:any) => { event.preventDefault();
+    const handleSubmit = async (event:any) => { event.preventDefault();
 
-        if (email && validateEmail(email)) {
+        if (email && validateEmail(email) && reCaptchaRef.current != null) {
+            //Extract Name
+            const emailNameRegex:RegExpExecArray|null = /+?(?=@)/.exec(email);
+            const emailName:string = emailNameRegex ? emailNameRegex[0] : '';
+            
             //Format Body
-            let body = 'We got Feedback on Encouraging Prayer!\n\n';
             const questions: string[] = Array.from(response, (prompt, result) => `${prompt}\n${result}`);
-            body += questions.sort((a: string, b: string) => (a.localeCompare(b))).join('\n');
+            const body = questions.sort((a: string, b: string) => (a.localeCompare(b))).join('\n');
 
-            //Send Email Response       
-            const emailMessage = { name: name || CONTENT.feedback.groups[roleID].name, email: email, message: body };
-            console.log('Sending Feedback:', emailMessage,);
+            //Recaptcha Call
+            const token = await reCaptchaRef.current.executeAsync();    
 
-            EMAILJS.send(`${process.env.REACT_APP_emailServiceId}`, `${process.env.REACT_APP_emailTemplateId}`, emailMessage, `${process.env.REACT_APP_emailUserId}`)
+            const emailParameters = { name: name || emailName, role: CONTENT.feedback.groups[roleID].name, email: email, body: body, 'g-recaptcha-response': token};
+            console.log('Sending Feedback:', emailParameters);
+
+            EMAILJS.send(`${process.env.REACT_APP_emailServiceId}`, `${process.env.REACT_APP_emailTemplateId}`, emailParameters, `${process.env.REACT_APP_emailUserId}`)
                 .then((res:any) => {
                     console.log('SUCCESS!', res.status, res.text);
                     setSubmitted(true);
@@ -70,6 +78,7 @@ const Feedback = () => {
             const emailInput: HTMLElement | null = document.getElementById('[1]-Email: ');
             if (emailInput != null) emailInput.scrollIntoView(); //TS-GOOD
         }
+        if(reCaptchaRef.current != null) reCaptchaRef.current.reset();
     }
 
     const getRoleUID = (id: number, questionID: number): string => {//TS-GOOD
@@ -114,7 +123,17 @@ const Feedback = () => {
                             CONTENT.feedback.groups[roleID].questions.map((props, i) => getInput({ ...props, key: `[KEY]-` + getRoleUID(roleID, i), UID: getRoleUID(roleID, i), valueCallback: getResponse, callBack: handleResponse }))
                         }
                     </div>
-                    <button id="submit" onClick={handleSubmit}>Send Feedback</button>
+                    <div id="submit-box">
+                    <ReCAPTCHA
+                        // className={recaptchaClass}
+                        sitekey={process.env.REACT_APP_emailServiceId || 'Key'}
+                        // size="invisible"
+                        ref={reCaptchaRef}
+                        />
+                        <button id="submit" onClick={handleSubmit}>Send Feedback</button>
+                    </div>
+                    
+                                     
                 </div>
             </div>
         </div>

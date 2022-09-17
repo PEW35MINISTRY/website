@@ -109,13 +109,21 @@
             // width: 70vw;
             max-width: 800px;
 
-            #submit {
-                color: white;
-                background-color: $red;
-                margin-left: auto;
+            #submit-box {
+                margin-top: 1.0rem;
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: flex-start;
 
-                &:hover {
-                    background-color: $blue;
+                #submit {
+                    color: white;
+                    background-color: $red;
+                    margin-left: auto;
+
+                    &:hover {
+                        background-color: $blue;
+                    }
                 }
             }
 
