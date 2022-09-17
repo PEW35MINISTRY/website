@@ -1,6 +1,6 @@
 import React, { useState, useEffect, forwardRef, useRef } from 'react';
+import EMAILJS from '@emailjs/browser';
 import CONTENT from '../content';
-
 import './Feedback.scss';
 
 const Feedback = () => {
@@ -19,7 +19,7 @@ const Feedback = () => {
 
     const getResponse = (UID: string): string => response.get(UID) || '';
 
-    const validateEmail = (value:string):boolean => /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()\.,;\s@\"]+\.{0,1})+([^<>()\.,;:\s@\"]{2,}|[\d\.]+))$/.test(value);
+    const validateEmail = (value: string): boolean => /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()\.,;\s@\"]+\.{0,1})+([^<>()\.,;:\s@\"]{2,}|[\d\.]+))$/.test(value);
 
     const handleEmail = (UID: string, value: string) => {
         handleResponse('[1]-Email: ', value);
@@ -27,10 +27,10 @@ const Feedback = () => {
     }
 
     const getEmailNote = () => {
-            if(!email || !email.length) return 'Required';
-            else if(validateEmail(email)) return 'Email Verified';
-            else return 'INVALID EMAIL';
-            }
+        if (!email || !email.length) return 'Required';
+        else if (validateEmail(email)) return 'Email Verified';
+        else return 'INVALID EMAIL';
+    }
 
     const handleRoleSelection = (id: number) => {
         handleResponse('[5]-Role: ', CONTENT.feedback.groups[id].name);
@@ -42,17 +42,29 @@ const Feedback = () => {
         handleRoleSelection(roleID);
     }, [name]);
 
-    const handleSubmit = () => {
-        if(email && validateEmail(email)) {
-        setSubmitted(true);
+    const handleSubmit = (event:any) => { event.preventDefault();
 
-        //Send Email Response
+        if (email && validateEmail(email)) {
+            //Format Body
+            let body = 'We got Feedback on Encouraging Prayer!\n\n';
+            const questions: string[] = Array.from(response, (prompt, result) => `${prompt}\n${result}`);
+            body += questions.sort((a: string, b: string) => (a.localeCompare(b))).join('\n');
 
+            //Send Email Response       
+            const emailMessage = { name: name || CONTENT.feedback.groups[roleID].name, email: email, message: body };
+            console.log('Sending Feedback:', emailMessage,);
 
+            EMAILJS.send(`${process.env.REACT_APP_emailServiceId}`, `${process.env.REACT_APP_emailTemplateId}`, emailMessage, `${process.env.REACT_APP_emailUserId}`)
+                .then((res:any) => {
+                    console.log('SUCCESS!', res.status, res.text);
+                    setSubmitted(true);
 
-        //Scroll to Thanks Message
-        const message: HTMLElement | null = document.getElementById("feedback-submitted");
-        if (message != null) message.scrollIntoView();
+                    //Scroll to Thanks Message
+                    const message: HTMLElement | null = document.getElementById("feedback-submitted");
+                    if (message != null) message.scrollIntoView();
+                }, (err:any) => {
+                    console.log('FAILED...', err);
+                });
 
         } else {//Scroll to Invalid Email
             const emailInput: HTMLElement | null = document.getElementById('[1]-Email: ');
@@ -80,9 +92,9 @@ const Feedback = () => {
                     <Paragraph key={`[KEY]-Prayer]`} UID={`[3]-Prayer Request: `} prompt={CONTENT.feedback['prayer-prompt']} valueCallback={getResponse}
                         callBack={handleResponse} />
                 </div>
-                <div id="vertical-wrapper">                    
+                <div id="vertical-wrapper">
                     <div id="general-questions">
-                        <Field key={`[KEY]-Email]`} UID={'[1]-Email: '} prompt={'Enter Email:'} note={getEmailNote()} type={'email'} valueCallback={()=>email}
+                        <Field key={`[KEY]-Email]`} UID={'[1]-Email: '} prompt={'Enter Email:'} note={getEmailNote()} type={'email'} valueCallback={() => email}
                             callBack={handleEmail} />
                         {
                             CONTENT.feedback.general.map((props, i) => getInput({ ...props, key: `[KEY]-G-${i + 1}: `, UID: `[4]-G-${i + 1}: ${props.prompt}`, valueCallback: getResponse, callBack: handleResponse }))
@@ -132,7 +144,7 @@ const getInput = ({ ...props }: { key: any, UID: string, type: string, prompt: s
     }
 }
 
-const Prompt = ({...props}: {prompt: string, note?: string | null,}) => {
+const Prompt = ({ ...props }: { prompt: string, note?: string | null, }) => {
     return (
         <div className='label-box'>
             <label htmlFor={String(props.prompt)}>{props.prompt}</label>
@@ -141,7 +153,7 @@ const Prompt = ({...props}: {prompt: string, note?: string | null,}) => {
     );
 }
 
-const Field = ({ ...props }: { UID: string, prompt: string, note?: string | null, type?:string|null, valueCallback: any, callBack: any }) => {
+const Field = ({ ...props }: { UID: string, prompt: string, note?: string | null, type?: string | null, valueCallback: any, callBack: any }) => {
 
     return (
         <div key={props.UID} id={props.UID} className="input-box input-field">
@@ -211,7 +223,7 @@ const Select = ({ ...props }: { UID: string, prompt: string, note?: string | nul
 
     return (
         <div key={props.UID} id={props.UID} className="input-box input-select">
-            <Prompt prompt={props.prompt} note={'Select Multiple'+(props.note||'')} />
+            <Prompt prompt={props.prompt} note={'Select Multiple' + (props.note || '')} />
             <div className='options-box'>
                 {
                     props.options.sort((a, b) => a.length - b.length).map((option, i) =>
