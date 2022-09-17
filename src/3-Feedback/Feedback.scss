@@ -1,6 +1,6 @@
 @import "../index.scss";
 
-#feedback-submitted{
+#feedback-submitted {
     width: 100vw;
     text-align: center;
 
@@ -34,7 +34,7 @@
 
     @media screen and (max-width: 991px) {
         max-width: 90vw;
-      }
+    }
 
     h2 {
         margin-bottom: 2vh;
@@ -100,7 +100,7 @@
                     height: 100%;
                 }
             }
-          }
+        }
 
 
         #vertical-wrapper {
@@ -123,6 +123,25 @@
                 display: flex;
                 flex-direction: column;
                 margin: 0.5rem 0;
+
+                .label-box {
+                    width: 90%;
+                    display: flex;
+                    flex-direction: row;
+                    align-items: baseline;
+
+                    h6 {
+                        font-size: 0.5rem;
+                        letter-spacing: 0.05rem;
+                        color: $t-black;
+                        margin: 0 1.0rem;
+                    }
+
+                    .required {
+                        color: $red;
+                        font-weight: 600;
+                    }
+                }
             }
 
             input,
@@ -143,19 +162,6 @@
 
             .input-select,
             .input-option {
-                .label-box {
-                    width: 90%;
-                    display: flex;
-                    flex-direction: row;
-                    align-items: baseline;
-
-                    h6 {
-                        font-size: 0.75rem;
-                        color: $t-black;
-                        margin: 0 1.0rem;
-                    }
-                }
-
                 .options-box {
                     display: flex;
                     flex-wrap: wrap;
@@ -174,10 +180,12 @@
                         margin: 0 0.5rem 1.0rem 0.5rem;
                         width: fit-content;
 
-                        &:hover {
-                            color: whitesmoke;
-                            background-color: $red;
-                            cursor: grab;
+                        @media (hover: hover) {
+                            &:hover {
+                                color: whitesmoke;
+                                background-color: $red;
+                                cursor: grab;
+                            }
                         }
 
                     }
@@ -186,9 +194,11 @@
                         color: whitesmoke;
                         background-color: $red;
 
-                        &:hover {
-                            color: black;
-                            background-color: $t-white;
+                        @media (hover: hover) {
+                            &:hover {
+                                color: black;
+                                background-color: $t-white;
+                            }
                         }
                     }
                 }

@@ -5,6 +5,7 @@ import './Feedback.scss';
 
 const Feedback = () => {
     const [submitted, setSubmitted] = useState<boolean>(false);
+    const [email, setEmail] = useState<string>();
     const [name, setName] = useState<string>();
     const [roleID, setRoleID] = useState<number>(1);
 
@@ -16,31 +17,58 @@ const Feedback = () => {
         console.log(response);
     }
 
-    const getResponse = (UID: string):string => response.get(UID) || '';
+    const getResponse = (UID: string): string => response.get(UID) || '';
+
+    const validateEmail = (value:string):boolean => /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()\.,;\s@\"]+\.{0,1})+([^<>()\.,;:\s@\"]{2,}|[\d\.]+))$/.test(value);
+
+    const handleEmail = (UID: string, value: string) => {
+        handleResponse('[1]-Email: ', value);
+        setEmail(value);
+    }
+
+    const getEmailNote = () => {
+            if(!email || !email.length) return 'Required';
+            else if(validateEmail(email)) return 'Email Verified';
+            else return 'INVALID EMAIL';
+            }
 
     const handleRoleSelection = (id: number) => {
         handleResponse('[5]-Role: ', CONTENT.feedback.groups[id].name);
         setRoleID(id);
     }
-    useEffect(()=>handleRoleSelection(roleID),[]);
+    useEffect(() => {
+        if (email) handleResponse('[1]-Email: ', email);
+        if (name) handleResponse('[2]-Name: ', name);
+        handleRoleSelection(roleID);
+    }, [name]);
 
     const handleSubmit = () => {
+        if(email && validateEmail(email)) {
         setSubmitted(true);
 
+        //Send Email Response
 
 
 
+        //Scroll to Thanks Message
+        const message: HTMLElement | null = document.getElementById("feedback-submitted");
+        if (message != null) message.scrollIntoView();
+
+        } else {//Scroll to Invalid Email
+            const emailInput: HTMLElement | null = document.getElementById('[1]-Email: ');
+            if (emailInput != null) emailInput.scrollIntoView(); //TS-GOOD
+        }
     }
 
-    const getRoleUID = (id:number, questionID: number):string => {
+    const getRoleUID = (id: number, questionID: number): string => {//TS-GOOD
         let count = CONTENT.feedback.general.length + 10;
-        for(var i=0; i<id; i++) {
+        for (var i = 0; i < id; i++) {
             count += CONTENT.feedback.groups[i].questions.length;
         }
         return '[5]-R-' + CONTENT.feedback.groups[id].name + '-' + String(count + questionID + 1) + ': ' + CONTENT.feedback.groups[roleID].questions[questionID].prompt;
     }
 
-    return (submitted 
+    return (submitted
         ? <div id="feedback-submitted">
             <h3>Thank you for your feedback{name ? ' ' : ''}{name}!</h3>
         </div>
@@ -52,10 +80,12 @@ const Feedback = () => {
                     <Paragraph key={`[KEY]-Prayer]`} UID={`[3]-Prayer Request: `} prompt={CONTENT.feedback['prayer-prompt']} valueCallback={getResponse}
                         callBack={handleResponse} />
                 </div>
-                <div id="vertical-wrapper">
+                <div id="vertical-wrapper">                    
                     <div id="general-questions">
+                        <Field key={`[KEY]-Email]`} UID={'[1]-Email: '} prompt={'Enter Email:'} note={getEmailNote()} type={'email'} valueCallback={()=>email}
+                            callBack={handleEmail} />
                         {
-                            CONTENT.feedback.general.map((props, i) => getInput({ ...props, key: `[KEY]-G-${i+1}: `, UID: `[4]-G-${i+1}: ${props.prompt}`, valueCallback: getResponse, callBack: handleResponse}))
+                            CONTENT.feedback.general.map((props, i) => getInput({ ...props, key: `[KEY]-G-${i + 1}: `, UID: `[4]-G-${i + 1}: ${props.prompt}`, valueCallback: getResponse, callBack: handleResponse }))
                         }
 
                         <label htmlFor='Role Selection'>Which Role fits you?</label>
@@ -63,13 +93,13 @@ const Feedback = () => {
 
                     <div id="role-selector-box">
                         {
-                            CONTENT.feedback.groups.map((group, i) => <button key={`Role-${i+1}`} className={`group-selector ${i === roleID ? 'selected' : ''}`}
+                            CONTENT.feedback.groups.map((group, i) => <button key={`Role-${i + 1}`} className={`group-selector ${i === roleID ? 'selected' : ''}`}
                                 onClick={() => handleRoleSelection(i)}>{group.name}</button>)
                         }
                     </div>
                     <div id="role-questions">
                         {
-                            CONTENT.feedback.groups[roleID].questions.map((props, i) => getInput({ ...props, key:`[KEY]-`+getRoleUID(roleID, i), UID: getRoleUID(roleID, i), valueCallback: getResponse, callBack: handleResponse}))
+                            CONTENT.feedback.groups[roleID].questions.map((props, i) => getInput({ ...props, key: `[KEY]-` + getRoleUID(roleID, i), UID: getRoleUID(roleID, i), valueCallback: getResponse, callBack: handleResponse }))
                         }
                     </div>
                     <button id="submit" onClick={handleSubmit}>Send Feedback</button>
@@ -82,7 +112,7 @@ export default Feedback;
 
 
 //Input Type Components
-const getInput = ({ ...props }: { key: any, UID:string, type: string, prompt: string, options?: string[], valueCallback?: any, callBack?: any }) => {
+const getInput = ({ ...props }: { key: any, UID: string, type: string, prompt: string, options?: string[], valueCallback?: any, callBack?: any }) => {//TS-GOOD
     switch (props.type) {
         case 'field':
             return <Field key={props.key} UID={props.UID} prompt={props.prompt} valueCallback={props.valueCallback}
@@ -102,33 +132,42 @@ const getInput = ({ ...props }: { key: any, UID:string, type: string, prompt: st
     }
 }
 
-const Field = ({ ...props }: {UID:string, prompt: string, valueCallback: any, callBack: any }) => {
+const Prompt = ({...props}: {prompt: string, note?: string | null,}) => {
+    return (
+        <div className='label-box'>
+            <label htmlFor={String(props.prompt)}>{props.prompt}</label>
+            <h6 className={props.note && props.note == 'Required' || props.note?.toLowerCase().includes('invalid') ? 'required' : props.note ? '' : 'none'}>{props.note}</h6>
+        </div>
+    );
+}
+
+const Field = ({ ...props }: { UID: string, prompt: string, note?: string | null, type?:string|null, valueCallback: any, callBack: any }) => {
 
     return (
-        <div key={props.UID} className="input-box input-field">
-            <label htmlFor={String(props.prompt)}>{props.prompt}</label>
-            <input name={String(props.prompt)} type="text" value={props.valueCallback(props.UID)} 
+        <div key={props.UID} id={props.UID} className="input-box input-field">
+            <Prompt prompt={props.prompt} note={props.note} />
+            <input name={String(props.prompt)} type={props.type || "text"} value={props.valueCallback(props.UID)}
                 onChange={(e) => props.callBack(props.UID, e.target.value)} />
         </div>
     );
 }
 
-const Paragraph = ({ ...props }: {UID:string, prompt: string, valueCallback: any, callBack: any }) => {
+const Paragraph = ({ ...props }: { UID: string, prompt: string, note?: string | null, valueCallback: any, callBack: any }) => {
 
     return (
-        <div key={props.UID} className="input-box input-paragraph">
-            <label htmlFor={String(props.prompt)}>{props.prompt}</label>
-            <textarea name={String(props.prompt)} value={props.valueCallback(props.UID)} 
+        <div key={props.UID} id={props.UID} className="input-box input-paragraph">
+            <Prompt prompt={props.prompt} note={props.note} />
+            <textarea name={String(props.prompt)} value={props.valueCallback(props.UID)}
                 onChange={(e) => props.callBack(props.UID, e.target.value)} ></textarea>
         </div>
     );
 }
 
 //Single Select
-const Option = ({ ...props }: {UID:string, prompt: string, options: string[], valueCallback: any,  callBack?: any }) => {
+const Option = ({ ...props }: { UID: string, prompt: string, note?: string | null, options: string[], valueCallback: any, callBack?: any }) => {
     const [selected, setSelected] = useState<string | null>(null);
 
-    useEffect(()=>setSelected(props.valueCallback(props.UID) || ''), [props.valueCallback(props.UID)]);
+    useEffect(() => setSelected(props.valueCallback(props.UID) || ''), [props.valueCallback(props.UID)]);
 
     const handleSelection = (option: string) => {
         setSelected(option);
@@ -136,13 +175,13 @@ const Option = ({ ...props }: {UID:string, prompt: string, options: string[], va
     }
 
     return (
-        <div key={props.UID} className="input-box input-option">
-            <label htmlFor={String(props.prompt)}>{props.prompt}</label>
+        <div key={props.UID} id={props.UID} className="input-box input-option">
+            <Prompt prompt={props.prompt} note={props.note} />
             <div className='options-box'>
                 {
                     props.options.map((option, i) =>
                         <h4 key={i} className={selected === option ? 'selected' : ''}
-                        onClick={()=>handleSelection(option)}>{option}</h4>
+                            onClick={() => handleSelection(option)}>{option}</h4>
                     )
                 }
             </div>
@@ -151,36 +190,33 @@ const Option = ({ ...props }: {UID:string, prompt: string, options: string[], va
 }
 
 //Multiple Select
-const Select = ({ ...props }: {UID:string, prompt: string, options: string[], valueCallback: any,  callBack?: any }) => {
+const Select = ({ ...props }: { UID: string, prompt: string, note?: string | null, options: string[], valueCallback: any, callBack?: any }) => {
     const [selectedList, setSelectedList] = useState<string[]>([]);
-    
-    useEffect(()=>{
-        if(props.valueCallback(props.UID).length)
+
+    useEffect(() => {
+        if (props.valueCallback(props.UID).length)
             setSelectedList(JSON.parse(props.valueCallback(props.UID) || '') || []);
     }, [props.valueCallback(props.UID)]);
 
     const handleSelection = (option: string) => {
         const list = [...selectedList];
-        if(list.includes(option))
+        if (list.includes(option))
             list.splice(list.indexOf(option), 2);
         else
             list.push(option);
 
-            setSelectedList([...list]);
+        setSelectedList([...list]);
         props.callBack(props.UID, JSON.stringify(list));
     }
 
     return (
-        <div key={props.UID} className="input-box input-select">
-            <div className='label-box'>
-                <label htmlFor={String(props.prompt)}>{props.prompt}</label>
-                <h6>Select Multiple</h6>
-            </div>
+        <div key={props.UID} id={props.UID} className="input-box input-select">
+            <Prompt prompt={props.prompt} note={'Select Multiple'+(props.note||'')} />
             <div className='options-box'>
                 {
-                    props.options.sort((a,b)=>a.length-b.length).map((option, i) =>
+                    props.options.sort((a, b) => a.length - b.length).map((option, i) =>
                         <h4 key={i} className={selectedList.includes(option) ? 'selected' : ''}
-                            onClick={()=>handleSelection(option)}>{option}</h4>
+                            onClick={() => handleSelection(option)}>{option}</h4>
                     )
                 }
             </div>
@@ -188,11 +224,11 @@ const Select = ({ ...props }: {UID:string, prompt: string, options: string[], va
     );
 }
 
-const Drop = ({ ...props }: {UID:string, prompt: string, options: string[], valueCallback: any,  callBack?: any }) => {
+const Drop = ({ ...props }: { UID: string, prompt: string, note?: string | null, options: string[], valueCallback: any, callBack?: any }) => {
 
     return (
-        <div key={props.UID} className="input-box input-drop">
-            <label htmlFor={String(props.prompt)}>{props.prompt}</label>
+        <div key={props.UID} id={props.UID} className="input-box input-drop">
+            <Prompt prompt={props.prompt} note={props.note} />
             <select name={String(props.prompt)} value={props.valueCallback(props.UID)}
                 onChange={(e) => props.callBack(props.UID, e.target.value)}>
                 {

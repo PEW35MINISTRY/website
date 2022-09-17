@@ -105,13 +105,26 @@ interface cardContent {
 }
 
 const Card = (content: cardContent) => {
+    const cardRef = useRef<null | HTMLDivElement>(null);
     const [open, setOpen] = useState<boolean>(false);
+
+    useEffect(() => { //TS-GOOD
+        const testViewable = () => {
+            if(cardRef.current && cardRef.current.offsetTop <= window.pageYOffset)
+                setOpen(true);         
+                window.removeEventListener("scroll", testViewable);
+        }        
+        window.addEventListener("scroll", testViewable);      
+        return () => {
+          window.removeEventListener("scroll", testViewable);
+        };
+      }, []);
 
     const getImageOpacity = (): number => open ? 0.1 : 0.7;
     const getInsideOpacity = (): number => open ? 1.0 : 0.0;
 
     return (
-        <div className="card" id={content.prompt} onMouseEnter={() => setOpen(true)} onClick={() => setOpen(true)}>
+        <div className="card" id={content.prompt} ref={cardRef} onMouseEnter={() => setOpen(true)} onClick={() => setOpen(true)}>
             <div className="description">
                 <div className="description-inside" style={{ opacity: getInsideOpacity() }}>
                     {content.header && <label className='header'>{content.header}</label>}
