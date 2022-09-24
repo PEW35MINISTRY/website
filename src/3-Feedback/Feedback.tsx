@@ -8,7 +8,7 @@ const Feedback = () => {
     const [submitted, setSubmitted] = useState<boolean>(false);
     const [email, setEmail] = useState<string>();
     const [name, setName] = useState<string>();
-    const [roleID, setRoleID] = useState<number>(1);
+    const [roleID, setRoleID] = useState<number | null>(null);
     const reCaptchaRef = useRef<ReCAPTCHA | null>(null);
 
     const [response, setResponse] = useState<Map<string, string>>(new Map());
@@ -31,7 +31,7 @@ const Feedback = () => {
     useEffect(() => {
         if (email) handleResponse('[1]-Email: ', email);
         if (name) handleResponse('[2]-Name: ', name);
-        handleRoleSelection(roleID);
+        // handleRoleSelection(roleID);
     }, [name]);
 
     //Email Handling
@@ -64,7 +64,7 @@ const Feedback = () => {
             //Recaptcha Call
             const token = await reCaptchaRef.current.executeAsync();
 
-            const emailParameters = { name: name || emailName, role: CONTENT.feedback.groups[roleID].name, email: email, body: body, 'g-recaptcha-response': token };
+            const emailParameters = { name: name || emailName, role: CONTENT.feedback.groups[roleID || 0].name, email: email, body: body, 'g-recaptcha-response': token };
             console.log('Sending Feedback:', emailParameters);
 
             EMAILJS.send(`${process.env.REACT_APP_emailServiceId}`, `${process.env.REACT_APP_emailTemplateId}`, emailParameters, `${process.env.REACT_APP_emailUserId}`)
@@ -91,7 +91,7 @@ const Feedback = () => {
         for (var i = 0; i < id; i++) {
             count += CONTENT.feedback.groups[i].questions.length;
         }
-        return '[5]-R-' + CONTENT.feedback.groups[id].name + '-' + String(count + questionID + 1) + ': ' + CONTENT.feedback.groups[roleID].questions[questionID].prompt;
+        return '[5]-R-' + CONTENT.feedback.groups[id].name + '-' + String(count + questionID + 1) + ': ' + CONTENT.feedback.groups[roleID || 0].questions[questionID].prompt;
     }
 
     return (submitted
@@ -123,9 +123,9 @@ const Feedback = () => {
                                 onClick={() => handleRoleSelection(i)}>{group.name}</button>)
                         }
                     </div>
-                    <div id="role-questions">
+                    <div id="role-questions" className={roleID != null ? '' : 'none'}>
                         {
-                            CONTENT.feedback.groups[roleID].questions.map((props, i) => getInput({ ...props, key: `[KEY]-` + getRoleUID(roleID, i), UID: getRoleUID(roleID, i), valueCallback: getResponse, callBack: handleResponse }))
+                            CONTENT.feedback.groups[roleID || 0].questions.map((props, i) => getInput({ ...props, key: `[KEY]-` + getRoleUID(roleID || 0, i), UID: getRoleUID(roleID || 0, i), valueCallback: getResponse, callBack: handleResponse }))
                         }
                     </div>
                     <div id="submit-box">

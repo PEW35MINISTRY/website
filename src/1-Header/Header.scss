@@ -98,8 +98,9 @@
 
             #stage-banner {
                 position: relative;
-                bottom: 0;
+                bottom: -3rem;
                 margin: 4.0rem 0 0 -5vw;
+                // margin-bottom: -2rem;
                 width: fit-content;
                 background-color: $t-black;
                 color: $blue;

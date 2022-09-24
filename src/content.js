@@ -102,14 +102,6 @@ export default {
 
         "general":[
             {
-                "type":"paragraph",
-                "prompt":"What are your thoughts on the Encouraging Prayer App?",
-            },
-            {
-                "type":"field",
-                "prompt":"Any ideas for new features?",
-            },
-            {
                 "type":"option",
                 "prompt":"What is the most important feature?",
                 "options":[
@@ -118,13 +110,29 @@ export default {
                     "Event Posting",
                     "Curated Content"
                 ]
-            }
+            },
+            {
+                "type":"field",
+                "prompt":"Any ideas for new features?",
+            }  ,
+            {
+                "type":"paragraph",
+                "prompt":"What are your thoughts on the Encouraging Prayer App?",
+            }                      
         ],
 
         "groups":[
             {
                 "name":"Student",
                 "questions":[
+                    {
+                        "type":"option",
+                        "prompt":"Would you be willing to give monthly feedback as the app is developed?",
+                        "options":[
+                            "No",
+                            "Yes",
+                        ]
+                    },
                     {
                         "type":"option",
                         "prompt":"Would you be interested in multiple Prayer Partners?",
@@ -146,6 +154,14 @@ export default {
             {
                 "name":"Leader",
                 "questions":[
+                    {
+                        "type":"option",
+                        "prompt":"Would you be willing to give monthly feedback as the app is developed?",
+                        "options":[
+                            "No",
+                            "Yes",
+                        ]
+                    },
                     {
                         "type":"option",
                         "prompt":"Do you have a group of students that would be willing to try our beta release and provide input?",
@@ -200,7 +216,7 @@ export default {
                 "questions":[
                     {
                         "type":"option",
-                        "prompt":"Are you interested in helping out team?",
+                        "prompt":"Are you interested in helping our team?",
                         "options":[
                             "Join Development Team",
                             "Source of technical advice",
