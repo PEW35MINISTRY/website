@@ -96,7 +96,7 @@ const Header = () => {
 export default Header;
 
 
-interface cardContent {
+interface cardContent {//TS-GOOD
     prompt: string,
     header?: string,
     description: string,
@@ -105,14 +105,15 @@ interface cardContent {
 }
 
 const Card = (content: cardContent) => {
-    const cardRef = useRef<null | HTMLDivElement>(null);
+    const cardRef = useRef<null | any>(null);
     const [open, setOpen] = useState<boolean>(false);
 
     useEffect(() => { //TS-GOOD
         const testViewable = () => {
-            if(cardRef.current && cardRef.current.offsetTop <= window.pageYOffset)
+            if((cardRef.current.parentNode.offsetTop + cardRef.current.offsetTop) <= (window.pageYOffset)) {
                 setOpen(true);         
                 window.removeEventListener("scroll", testViewable);
+            } 
         }        
         window.addEventListener("scroll", testViewable);      
         return () => {
