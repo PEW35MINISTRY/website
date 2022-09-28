@@ -40,8 +40,6 @@ const Feedback = () => {
     //Responses Mapping
     const handleResponse = (staticKey: responseObject, value: string) => {
         setResponse(res => new Map(res.set(JSON.stringify(staticKey), value)));
-
-        console.log('Recorded:', response);
     }
 
     const getResponse = (staticKey: responseObject): string => response.get(JSON.stringify(staticKey)) || '';
@@ -54,17 +52,27 @@ const Feedback = () => {
     //Initial Posting to Response Map: onLoad
     useEffect(() => {
         if (email) handleResponse(STATIC_EMAIL, email);
-        if (name) handleResponse({ uid: '[2]-Name', formID: CONTENT.feedback['name-formID'], prompt: 'Name:' }, name);
+        if (name) handleResponse(STATIC_NAME, name);
         // handleRoleSelection(roleID);
     }, [name]);
 
     //Email Handling
     const validateEmail = (value: string): boolean => /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()\.,;\s@\"]+\.{0,1})+([^<>()\.,;:\s@\"]{2,}|[\d\.]+))$/.test(value);
     const STATIC_EMAIL = { uid: '[1]-Email', formID: CONTENT.feedback['email-formID'], prompt: 'Email:' };
+    const STATIC_NAME = { uid: '[2]-Name', formID: CONTENT.feedback['name-formID'], prompt: 'Name:' };
 
     const handleEmail = (staticKey: responseObject, value: string) => {
         handleResponse(STATIC_EMAIL, value);
         setEmail(value);
+
+        if(!name && validateEmail(value)) {
+            const emailNameRegex: RegExpExecArray | null = new RegExp(/.+(?=@)/).exec(value);
+            let extractedName:string = emailNameRegex ? emailNameRegex[0] : '';
+            if(extractedName.length > 2)
+                extractedName = extractedName.charAt(0).toUpperCase() + extractedName.slice(1);
+
+            handleResponse(STATIC_NAME, extractedName);
+        }
     }
 
     const getEmailNote = () => {
@@ -73,21 +81,22 @@ const Feedback = () => {
         else return 'INVALID EMAIL';
     }
 
-    //Form Submitting
+    /*****************
+     Form Submitting
+    ******************/
     const handleSubmit = async (event: any) => {
         event.preventDefault();
 
         if (email && validateEmail(email) && reCaptchaRef.current != null) {
-            //Extract Name
-            const emailNameRegex: RegExpExecArray | null = new RegExp(/.+(?=@)/).exec(email);
-            const emailName: string = emailNameRegex ? emailNameRegex[0] : '';
+            //Extract Calculated Name
+            const extractedName = getResponse(STATIC_NAME);
 
             //Extract Response UID and SORT
-            const questions: responseObject[] = Array.from(response, ([staticKey, value]) => { return ({ ...JSON.parse(staticKey), value: value }); }).sort((a: responseObject, b: responseObject) => ((a.uid).localeCompare(b.uid)));
+            const questions: responseObject[] = Array.from(response, ([staticKey, value]) => { return ({ ...JSON.parse(staticKey), value: value.replace(/[^A-Za-z0-9.@_-]/g, " ")}); }).sort((a: responseObject, b: responseObject) => ((a.uid).localeCompare(b.uid)));
 
             const emailResponse: string = questions.reduce((current, res, index) => current += `<strong>${index + 1}) ${res.prompt}</strong><p>${res.value}</p>`, '<div>') + '</div>';
             const token = await reCaptchaRef.current.executeAsync();
-            const emailParameters = { name: name || emailName, role: CONTENT.feedback.roles[roleID || 0].name, email: email, feedback: emailResponse, 'g-recaptcha-response': token };
+            const emailParameters = { name: name || extractedName, role: CONTENT.feedback.roles[roleID || 0].name, email: email, feedback: emailResponse, 'g-recaptcha-response': token };
 
             EMAILJS.send(`${process.env.REACT_APP_emailServiceId}`, `${process.env.REACT_APP_emailTemplateId}`, emailParameters, `${process.env.REACT_APP_emailUserId}`)
                 .then((res: any) => {
@@ -120,7 +129,7 @@ const Feedback = () => {
                         setSubmittedMessage((current) => ({ ...current, counter: count }));
                         count -= 1;
                         if (count <= 0) {
-                            // window.location.assign(CONTENT.feedback['google-form'] + 'viewform?' + ENCODE(JSON.parse(queryParameters)));
+                            window.location.assign(CONTENT.feedback['google-form'] + 'viewform?' + ENCODE(JSON.parse(queryParameters)));
                             clearInterval(interval);
                         }
                     }, 1000);

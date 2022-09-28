@@ -2,7 +2,7 @@
 
 #feedback-submitted {
     width: 100vw;
-    max-width: max(700px, 90vw);
+    max-width: min(700px, 90vw);
     text-align: center;
     margin: auto;
     padding: 0.5rem;
