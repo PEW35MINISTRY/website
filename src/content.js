@@ -98,10 +98,27 @@ export default {
 
 
     "feedback": {
-        "prayer-prompt":"How can our team pray for you today?",
 
+        "cors-proxy":"https://cors-anywhere.herokuapp.com/",   //TODO: Temporary Proxy
+
+        "google-form":"https://docs.google.com/forms/d/10htIlpcVD-EsQZtjTq8nzCpQXORVjZKxsZJrluyWqxw/",
+
+        "submit-success":"Thank you for your feedback!",
+
+        "submit-fail":"Unfortunately, we failed to save your feedback.  Not to worry, we will redirect you to Google Forms in: ",
+
+        "submit-fail-directions":"We are importing all your greatly appreciated feedback.  Please simply click 'SUBMIT' at the bottom.",
+
+        "name-formID":"entry.1649737574",
+
+        "email-formID":"entry.1864498328",
+
+        "prayer-formID":"entry.1669233170",
+        "prayer-prompt":"How can our team pray for you today?",
+        
         "general":[
             {
+                "formID":"entry.652543099",
                 "type":"option",
                 "prompt":"What is the most important feature?",
                 "options":[
@@ -112,20 +129,25 @@ export default {
                 ]
             },
             {
+                "formID":"entry.704561069",
                 "type":"field",
                 "prompt":"Any ideas for new features?",
             }  ,
             {
+                "formID":"entry.1986831274",
                 "type":"paragraph",
                 "prompt":"What are your thoughts on the Encouraging Prayer App?",
             }                      
         ],
 
-        "groups":[
+        "role-formID":"entry.1028101260",
+
+        "roles":[
             {
                 "name":"Student",
                 "questions":[
                     {
+                        "formID":"entry.1747772692",
                         "type":"option",
                         "prompt":"Would you be willing to give monthly feedback as the app is developed?",
                         "options":[
@@ -134,6 +156,7 @@ export default {
                         ]
                     },
                     {
+                        "formID":"entry.1978563427",
                         "type":"option",
                         "prompt":"Would you be interested in multiple Prayer Partners?",
                         "options":[
@@ -142,6 +165,7 @@ export default {
                         ]
                     },
                     {
+                        "formID":"entry.2122381404",
                         "type":"option",
                         "prompt":"Would you be interested in a small prayer group of 3-5?",
                         "options":[
@@ -155,6 +179,7 @@ export default {
                 "name":"Leader",
                 "questions":[
                     {
+                        "formID":"entry.1019493683",
                         "type":"option",
                         "prompt":"Would you be willing to give monthly feedback as the app is developed?",
                         "options":[
@@ -163,6 +188,7 @@ export default {
                         ]
                     },
                     {
+                        "formID":"entry.753053082",
                         "type":"option",
                         "prompt":"Do you have a group of students that would be willing to try our beta release and provide input?",
                         "options":[
@@ -171,6 +197,7 @@ export default {
                         ]
                     },
                     {
+                        "formID":"entry.1457994900",
                         "type":"drop",
                         "prompt":"Roughly how many students attend your group?",
                         "options":[
@@ -181,6 +208,7 @@ export default {
                         ]
                     },
                     {
+                        "formID":"entry.1249044806",
                         "type":"paragraph",
                         "prompt":"Is there anything that would keep you from promoting this App with your students?",
                         "options":[
@@ -194,6 +222,7 @@ export default {
                 "name":"Financial Supporter",
                 "questions":[
                     {
+                        "formID":"entry.1742886000",
                         "type":"option",
                         "prompt":"Every gift is important to this project, and we believe the key to making it work long-term is to have ongoing monthly support.  Would you be willing to make a monthly gift?",
                         "options":[
@@ -202,6 +231,7 @@ export default {
                         ]
                     },
                     {
+                        "formID":"entry.644069819",
                         "type":"option",
                         "prompt":"PEW35 is also building an endowment fund to assure the future work of the ministry.  Gifts of $50,000 or more will be considered for this fund.  Can we send you more information?",
                         "options":[
@@ -215,6 +245,7 @@ export default {
                 "name":"Techno Wizard",
                 "questions":[
                     {
+                        "formID":"entry.6177422",
                         "type":"option",
                         "prompt":"Are you interested in helping our team?",
                         "options":[
@@ -224,6 +255,7 @@ export default {
                         ]
                     },
                     {
+                        "formID":"entry.1037757956",
                         "type":"select",
                         "prompt":"Do you have an area of expertise?",
                         "options":[
@@ -237,6 +269,7 @@ export default {
                         ]
                     },
                     {
+                        "formID":"entry.976720631",
                         "type":"select",
                         "prompt":"Are you familiar with these technologies?",
                         "options":[
@@ -248,6 +281,7 @@ export default {
                         ]
                     },
                     {
+                        "formID":"entry.999904264",
                         "type":"drop",
                         "prompt":"How much might you be available in the next 6 months?",
                         "options":[
@@ -257,10 +291,12 @@ export default {
                         ]
                     },
                     {
+                        "formID":"entry.392992440",
                         "type":"paragraph",
                         "prompt":"Do you have advice for security and scalability?",
                     },
                     {
+                        "formID":"entry.1967801108",
                         "type":"paragraph",
                         "prompt":"Are we on the right track?",
                     }

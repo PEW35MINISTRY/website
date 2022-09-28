@@ -1,11 +1,35 @@
 import React, { useState, useEffect, forwardRef, useRef } from 'react';
+import AXIOS from 'axios';
+import ENCODE from 'query-string-encode';
 import EMAILJS from '@emailjs/browser';
 import ReCAPTCHA from 'react-google-recaptcha';
 import CONTENT from '../content';
 import './Feedback.scss';
 
+import ICON_DATABASE_SUCCESS from '../0-Assets/database-success.png';
+import ICON_DATABASE_FAILURE from '../0-Assets/database-fail.png';
+import ICON_EMAIL_SUCCESS from '../0-Assets/email-success.png';
+import ICON_EMAIL_FAILURE from '../0-Assets/email-fail.png';
+
+//Response Types
+interface responseObject {
+    uid: string,
+    formID: string,
+    prompt: string,
+    value?: string
+}
+
+interface submitMessage {
+    databaseSuccess?: boolean,
+    emailSuccess?: boolean,
+    mainMessage?: string,
+    detailMessage?: string,
+    counter?: number,
+    redirect?: string,
+}
+
 const Feedback = () => {
-    const [submitted, setSubmitted] = useState<boolean>(false);
+    const [submittedMessage, setSubmittedMessage] = useState<submitMessage>({});
     const [email, setEmail] = useState<string>();
     const [name, setName] = useState<string>();
     const [roleID, setRoleID] = useState<number | null>(null);
@@ -14,31 +38,32 @@ const Feedback = () => {
     const [response, setResponse] = useState<Map<string, string>>(new Map());
 
     //Responses Mapping
-    const handleResponse = (UID: string, value: string) => {
-        setResponse(res => new Map(res.set(UID, value)));
+    const handleResponse = (staticKey: responseObject, value: string) => {
+        setResponse(res => new Map(res.set(JSON.stringify(staticKey), value)));
 
-        console.log(response);
+        console.log('Recorded:', response);
     }
 
-    const getResponse = (UID: string): string => response.get(UID) || '';
+    const getResponse = (staticKey: responseObject): string => response.get(JSON.stringify(staticKey)) || '';
 
     const handleRoleSelection = (id: number) => {
-        handleResponse('[5]-Role: ', CONTENT.feedback.groups[id].name);
+        handleResponse({ uid: '[5]-Role', formID: CONTENT.feedback['role-formID'], prompt: 'Role:' }, CONTENT.feedback.roles[id].name);
         setRoleID(id);
     }
 
     //Initial Posting to Response Map: onLoad
     useEffect(() => {
-        if (email) handleResponse('[1]-Email: ', email);
-        if (name) handleResponse('[2]-Name: ', name);
+        if (email) handleResponse(STATIC_EMAIL, email);
+        if (name) handleResponse({ uid: '[2]-Name', formID: CONTENT.feedback['name-formID'], prompt: 'Name:' }, name);
         // handleRoleSelection(roleID);
     }, [name]);
 
     //Email Handling
     const validateEmail = (value: string): boolean => /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()\.,;\s@\"]+\.{0,1})+([^<>()\.,;:\s@\"]{2,}|[\d\.]+))$/.test(value);
+    const STATIC_EMAIL = { uid: '[1]-Email', formID: CONTENT.feedback['email-formID'], prompt: 'Email:' };
 
-    const handleEmail = (UID: string, value: string) => {
-        handleResponse('[1]-Email: ', value);
+    const handleEmail = (staticKey: responseObject, value: string) => {
+        handleResponse(STATIC_EMAIL, value);
         setEmail(value);
     }
 
@@ -57,113 +82,152 @@ const Feedback = () => {
             const emailNameRegex: RegExpExecArray | null = new RegExp(/.+(?=@)/).exec(email);
             const emailName: string = emailNameRegex ? emailNameRegex[0] : '';
 
-            //Format Body
-            const questions: string[] = Array.from(response, (prompt, result) => `${prompt}\n${result}`);
-            const body = questions.sort((a: string, b: string) => (a.localeCompare(b))).join('\n');
+            //Extract Response UID and SORT
+            const questions: responseObject[] = Array.from(response, ([staticKey, value]) => { return ({ ...JSON.parse(staticKey), value: value }); }).sort((a: responseObject, b: responseObject) => ((a.uid).localeCompare(b.uid)));
 
-            //Recaptcha Call
+            const emailResponse: string = questions.reduce((current, res, index) => current += `<strong>${index + 1}) ${res.prompt}</strong><p>${res.value}</p>`, '<div>') + '</div>';
             const token = await reCaptchaRef.current.executeAsync();
-
-            const emailParameters = { name: name || emailName, role: CONTENT.feedback.groups[roleID || 0].name, email: email, body: body, 'g-recaptcha-response': token };
-            console.log('Sending Feedback:', emailParameters);
+            const emailParameters = { name: name || emailName, role: CONTENT.feedback.roles[roleID || 0].name, email: email, feedback: emailResponse, 'g-recaptcha-response': token };
 
             EMAILJS.send(`${process.env.REACT_APP_emailServiceId}`, `${process.env.REACT_APP_emailTemplateId}`, emailParameters, `${process.env.REACT_APP_emailUserId}`)
                 .then((res: any) => {
-                    console.log('SUCCESS!', res.status, res.text);
-                    setSubmitted(true);
-
-                    //Scroll to Thanks Message
-                    const message: HTMLElement | null = document.getElementById("feedback-submitted");
-                    if (message != null) message.scrollIntoView();
+                    console.log('Feedback Sent!', res.status, res.text);
+                    setSubmittedMessage((current) => ({ ...current, emailSuccess: true }));
                 }, (err: any) => {
                     console.log('FAILED...', err);
+                    setSubmittedMessage((current) => ({ ...current, emailSuccess: false }));
                 });
 
-        } else {//Scroll to Invalid Email
-            const emailInput: HTMLElement | null = document.getElementById('[1]-Email: ');
+            //Submit to Google Forms: https://docs.google.com/forms/d/10htIlpcVD-EsQZtjTq8nzCpQXORVjZKxsZJrluyWqxw/prefill
+            const combine: string = questions.reduce((result, current) => result += `"${current.formID}":"${current.value}",`, '{');
+            const queryParameters: string = combine.substring(0, combine.length - 1) + '}';
+
+            AXIOS.post(CONTENT.feedback['cors-proxy'] + CONTENT.feedback['google-form'] + 'formResponse?' + ENCODE(JSON.parse(queryParameters)), null, {  //TODO: Temporary Proxy
+                headers: {
+                    'content-type': 'application/x-www-form-urlencoded',
+                    'Access-Control-Allow-Origin': '*'
+                }
+            })
+                .then((res) => {
+                    console.log('Feedback Saved', res);
+                    setSubmittedMessage((current) => ({ ...current, databaseSuccess: true, mainMessage: CONTENT.feedback['submit-success'] }));
+                })
+                .catch((err) => {
+                    console.error('Feedback Failed', err);
+                    setSubmittedMessage((current) => ({ ...current, databaseSuccess: false, mainMessage: CONTENT.feedback['submit-fail'], detailMessage: CONTENT.feedback['submit-fail-directions'] }));
+                    let count: number = 10;
+                    const interval = setInterval(() => {
+                        setSubmittedMessage((current) => ({ ...current, counter: count }));
+                        count -= 1;
+                        if (count <= 0) {
+                            // window.location.assign(CONTENT.feedback['google-form'] + 'viewform?' + ENCODE(JSON.parse(queryParameters)));
+                            clearInterval(interval);
+                        }
+                    }, 1000);
+                });
+
+            //Scroll to Submit Message
+            const message: HTMLElement | null = document.getElementById("feedback-submitted");
+            if (message != null) message.scrollIntoView();
+
+        } else {
+            //Scroll to Invalid Email
+            const emailInput: HTMLElement | null = document.getElementById(STATIC_EMAIL.uid);
             if (emailInput != null) emailInput.scrollIntoView(); //TS-GOOD
         }
         if (reCaptchaRef.current != null) reCaptchaRef.current.reset();
     }
 
-    const getRoleUID = (id: number, questionID: number): string => {//TS-GOOD
-        let count = CONTENT.feedback.general.length + 10;
-        for (var i = 0; i < id; i++) {
-            count += CONTENT.feedback.groups[i].questions.length;
-        }
-        return '[5]-R-' + CONTENT.feedback.groups[id].name + '-' + String(count + questionID + 1) + ': ' + CONTENT.feedback.groups[roleID || 0].questions[questionID].prompt;
-    }
+    return ((submittedMessage.databaseSuccess && submittedMessage.emailSuccess)
+        ? <SubmitSuccess {...submittedMessage} />
 
-    return (submitted
-        ? <div id="feedback-submitted">
-            <h3>Thank you for your feedback{name ? ' ' : ''}{name}!</h3>
-        </div>
-        : <div id="feedback">
-            <h2>Feedback</h2>
-            <h3 id='welcome' className={(name && name.length) ? '' : 'none'}>Welcome {name},</h3>
-            <div id="horizontal-wrapper">
-                <div id="prayer-wrapper">
-                    <Paragraph key={`[KEY]-Prayer]`} UID={`[3]-Prayer Request: `} prompt={CONTENT.feedback['prayer-prompt']} valueCallback={getResponse}
-                        callBack={handleResponse} />
-                </div>
-                <div id="vertical-wrapper">
-                    <div id="general-questions">
-                        <Field key={`[KEY]-Email]`} UID={'[1]-Email: '} prompt={'Enter Email:'} note={getEmailNote()} type={'email'} valueCallback={() => email}
-                            callBack={handleEmail} />
-                        {
-                            CONTENT.feedback.general.map((props, i) => getInput({ ...props, key: `[KEY]-G-${i + 1}: `, UID: `[4]-G-${i + 1}: ${props.prompt}`, valueCallback: getResponse, callBack: handleResponse }))
-                        }
+        : (submittedMessage.mainMessage)
+            ? <SubmitFailure {...submittedMessage} />
 
-                        <label htmlFor='Role Selection'>Which Role fits you?</label>
+            : <div id="feedback">
+                <h2>Feedback</h2>
+                <h3 id='welcome' className={(name && name.length) ? '' : 'none'}>Welcome {name},</h3>
+                <div id="horizontal-wrapper">
+                    <div id="prayer-wrapper">
+                        <Paragraph key={`[KEY]-Prayer]`} keyObject={{ uid: `[2]-Prayer`, formID: CONTENT.feedback['prayer-formID'], prompt: CONTENT.feedback['prayer-prompt'] }} valueCallback={getResponse}
+                            callBack={handleResponse} />
                     </div>
+                    <div id="vertical-wrapper">
+                        <div id="general-questions">
+                            <Field key={`[KEY]-Email]`} keyObject={STATIC_EMAIL} note={getEmailNote()} type={'email'} valueCallback={() => email}
+                                callBack={handleEmail} />
+                            {
+                                CONTENT.feedback.general.map((props, i) => getInput({ ...props, keyObject: { uid: `[4]-${i}`, formID: props.formID, prompt: props.prompt }, valueCallback: getResponse, callBack: handleResponse }))
+                            }
 
-                    <div id="role-selector-box">
-                        {
-                            CONTENT.feedback.groups.map((group, i) => <button key={`Role-${i + 1}`} className={`group-selector ${i === roleID ? 'selected' : ''}`}
-                                onClick={() => handleRoleSelection(i)}>{group.name}</button>)
-                        }
-                    </div>
-                    <div id="role-questions" className={roleID != null ? '' : 'none'}>
-                        {
-                            CONTENT.feedback.groups[roleID || 0].questions.map((props, i) => getInput({ ...props, key: `[KEY]-` + getRoleUID(roleID || 0, i), UID: getRoleUID(roleID || 0, i), valueCallback: getResponse, callBack: handleResponse }))
-                        }
-                    </div>
-                    <div id="submit-box">
-                        <ReCAPTCHA
-                            // className={recaptchaClass}
-                            sitekey={process.env.REACT_APP_recaptchaKey || 'Key'}
-                            size="invisible"
-                            ref={reCaptchaRef}
-                        />
-                        <button id="submit" onClick={handleSubmit}>Send Feedback</button>
-                    </div>
+                            <label htmlFor='Role Selection'>Which Role fits you?</label>
+                        </div>
+
+                        <div id="role-selector-box">
+                            {
+                                CONTENT.feedback.roles.map((group, i) => <button key={`Role-${i + 1}`} className={`group-selector ${i === roleID ? 'selected' : ''}`}
+                                    onClick={() => handleRoleSelection(i)}>{group.name}</button>)
+                            }
+                        </div>
+                        <div id="role-questions" className={roleID != null ? '' : 'none'}>
+                            {
+                                CONTENT.feedback.roles[roleID || 0].questions.map((props, i) => getInput({ ...props, keyObject: { uid: `[6]-${roleID}-${i}`, formID: props.formID, prompt: props.prompt }, valueCallback: getResponse, callBack: handleResponse }))
+                            }
+                        </div>
+                        <div id="submit-box">
+                            <ReCAPTCHA
+                                // className={recaptchaClass}
+                                sitekey={process.env.REACT_APP_recaptchaKey || 'Key'}
+                                size="invisible"
+                                ref={reCaptchaRef}
+                            />
+                            <button id="submit" onClick={handleSubmit}>Send Feedback</button>
+                        </div>
 
 
+                    </div>
                 </div>
             </div>
-        </div>
     );
 }
 export default Feedback;
 
+const SubmitSuccess = (props: submitMessage) =>
+    <div id="feedback-submitted">
+        <h3>{props.mainMessage}</h3>
+    </div>;
+
+const SubmitFailure = (props: submitMessage) =>
+    <a href={props.redirect}>
+        <div id="feedback-submitted" className='fail'>
+            <h3>{props.mainMessage}</h3>
+            <div>
+                {(props.emailSuccess) ? <img src={ICON_EMAIL_SUCCESS} alt="Email Success" id="icon" /> : <img src={ICON_EMAIL_FAILURE} alt="Email Failure" id="icon" />}
+                <strong>{props.counter}</strong>
+                {(props.databaseSuccess) ? <img src={ICON_DATABASE_SUCCESS} alt="Database Failure" id="icon" /> : <img src={ICON_DATABASE_FAILURE} alt="Database Failure" id="icon" />}
+            </div>
+            <h5>{props.detailMessage}</h5>
+        </div>
+    </a>;
+
 
 //Input Type Components
-const getInput = ({ ...props }: { key: any, UID: string, type: string, prompt: string, options?: string[], valueCallback?: any, callBack?: any }) => {//TS-GOOD
+const getInput = ({ ...props }: { keyObject: responseObject, type: string, options?: string[], valueCallback?: any, callBack?: any }) => {//TS-GOOD
     switch (props.type) {
         case 'field':
-            return <Field key={props.key} UID={props.UID} prompt={props.prompt} valueCallback={props.valueCallback}
+            return <Field key={props.keyObject.uid} keyObject={props.keyObject} valueCallback={props.valueCallback}
                 callBack={props.callBack} />
         case 'paragraph':
-            return <Paragraph key={props.key} UID={props.UID} prompt={props.prompt} valueCallback={props.valueCallback}
+            return <Paragraph key={props.keyObject.uid} keyObject={props.keyObject} valueCallback={props.valueCallback}
                 callBack={props.callBack} />
         case 'option':
-            return <Option key={props.key} UID={props.UID} prompt={props.prompt} options={props.options || []} valueCallback={props.valueCallback}
+            return <Option key={props.keyObject.uid} keyObject={props.keyObject} options={props.options || []} valueCallback={props.valueCallback}
                 callBack={props.callBack} />
         case 'select':
-            return <Select key={props.key} UID={props.UID} prompt={props.prompt} options={props.options || []} valueCallback={props.valueCallback}
+            return <Select key={props.keyObject.uid} keyObject={props.keyObject} options={props.options || []} valueCallback={props.valueCallback}
                 callBack={props.callBack} />
         case 'drop':
-            return <Drop key={props.key} UID={props.UID} prompt={props.prompt} options={props.options || []} valueCallback={props.valueCallback}
+            return <Drop key={props.keyObject.uid} keyObject={props.keyObject} options={props.options || []} valueCallback={props.valueCallback}
                 callBack={props.callBack} />
     }
 }
@@ -177,42 +241,42 @@ const Prompt = ({ ...props }: { prompt: string, note?: string | null, }) => {
     );
 }
 
-const Field = ({ ...props }: { UID: string, prompt: string, note?: string | null, type?: string | null, valueCallback: any, callBack: any }) => {
+const Field = ({ ...props }: { keyObject: responseObject, note?: string | null, type?: string | null, valueCallback: any, callBack: any }) => {
 
     return (
-        <div key={props.UID} id={props.UID} className="input-box input-field">
-            <Prompt prompt={props.prompt} note={props.note} />
-            <input name={String(props.prompt)} type={props.type || "text"} value={props.valueCallback(props.UID)}
-                onChange={(e) => props.callBack(props.UID, e.target.value)} />
+        <div key={props.keyObject.uid} id={props.keyObject.uid} className="input-box input-field">
+            <Prompt prompt={props.keyObject.prompt} note={props.note} />
+            <input name={String(props.keyObject.prompt)} type={props.type || "text"} value={props.valueCallback(props.keyObject)}
+                onChange={(e) => props.callBack(props.keyObject, e.target.value)} />
         </div>
     );
 }
 
-const Paragraph = ({ ...props }: { UID: string, prompt: string, note?: string | null, valueCallback: any, callBack: any }) => {
+const Paragraph = ({ ...props }: { keyObject: responseObject, note?: string | null, valueCallback: any, callBack: any }) => {
 
     return (
-        <div key={props.UID} id={props.UID} className="input-box input-paragraph">
-            <Prompt prompt={props.prompt} note={props.note} />
-            <textarea name={String(props.prompt)} value={props.valueCallback(props.UID)}
-                onChange={(e) => props.callBack(props.UID, e.target.value)} ></textarea>
+        <div key={props.keyObject.uid} id={props.keyObject.uid} className="input-box input-paragraph">
+            <Prompt prompt={props.keyObject.prompt} note={props.note} />
+            <textarea name={String(props.keyObject.prompt)} value={props.valueCallback(props.keyObject)}
+                onChange={(e) => props.callBack(props.keyObject, e.target.value)} ></textarea>
         </div>
     );
 }
 
 //Single Select
-const Option = ({ ...props }: { UID: string, prompt: string, note?: string | null, options: string[], valueCallback: any, callBack?: any }) => {
+const Option = ({ ...props }: { keyObject: responseObject, note?: string | null, options: string[], valueCallback: any, callBack?: any }) => {
     const [selected, setSelected] = useState<string | null>(null);
 
-    useEffect(() => setSelected(props.valueCallback(props.UID) || ''), [props.valueCallback(props.UID)]);
+    useEffect(() => setSelected(props.valueCallback(props.keyObject) || ''), [props.valueCallback(props.keyObject)]);
 
     const handleSelection = (option: string) => {
         setSelected(option);
-        props.callBack(props.UID, option);
+        props.callBack(props.keyObject, option);
     }
 
     return (
-        <div key={props.UID} id={props.UID} className="input-box input-option">
-            <Prompt prompt={props.prompt} note={props.note} />
+        <div key={props.keyObject.uid} id={props.keyObject.uid} className="input-box input-option">
+            <Prompt prompt={props.keyObject.prompt} note={props.note} />
             <div className='options-box'>
                 {
                     props.options.map((option, i) =>
@@ -226,13 +290,13 @@ const Option = ({ ...props }: { UID: string, prompt: string, note?: string | nul
 }
 
 //Multiple Select
-const Select = ({ ...props }: { UID: string, prompt: string, note?: string | null, options: string[], valueCallback: any, callBack?: any }) => {
+const Select = ({ ...props }: { keyObject: responseObject, note?: string | null, options: string[], valueCallback: any, callBack?: any }) => {
     const [selectedList, setSelectedList] = useState<string[]>([]);
 
     useEffect(() => {
-        if (props.valueCallback(props.UID).length)
-            setSelectedList(JSON.parse(props.valueCallback(props.UID) || '') || []);
-    }, [props.valueCallback(props.UID)]);
+        if (props.valueCallback(props.keyObject).length)
+            setSelectedList(JSON.parse(props.valueCallback(props.keyObject) || '') || []);
+    }, [props.valueCallback(props.keyObject)]);
 
     const handleSelection = (option: string) => {
         const list = [...selectedList];
@@ -242,12 +306,12 @@ const Select = ({ ...props }: { UID: string, prompt: string, note?: string | nul
             list.push(option);
 
         setSelectedList([...list]);
-        props.callBack(props.UID, JSON.stringify(list));
+        props.callBack(props.keyObject, JSON.stringify(list));
     }
 
     return (
-        <div key={props.UID} id={props.UID} className="input-box input-select">
-            <Prompt prompt={props.prompt} note={'Select Multiple' + (props.note || '')} />
+        <div key={props.keyObject.uid} id={props.keyObject.uid} className="input-box input-select">
+            <Prompt prompt={props.keyObject.prompt} note={'Select Multiple' + (props.note || '')} />
             <div className='options-box'>
                 {
                     props.options.sort((a, b) => a.length - b.length).map((option, i) =>
@@ -260,13 +324,13 @@ const Select = ({ ...props }: { UID: string, prompt: string, note?: string | nul
     );
 }
 
-const Drop = ({ ...props }: { UID: string, prompt: string, note?: string | null, options: string[], valueCallback: any, callBack?: any }) => {
+const Drop = ({ ...props }: { keyObject: responseObject, note?: string | null, options: string[], valueCallback: any, callBack?: any }) => {
 
     return (
-        <div key={props.UID} id={props.UID} className="input-box input-drop">
-            <Prompt prompt={props.prompt} note={props.note} />
-            <select name={String(props.prompt)} value={props.valueCallback(props.UID)}
-                onChange={(e) => props.callBack(props.UID, e.target.value)}>
+        <div key={props.keyObject.uid} id={props.keyObject.uid} className="input-box input-drop">
+            <Prompt prompt={props.keyObject.prompt} note={props.note} />
+            <select name={String(props.keyObject.uid)} value={props.valueCallback(props.keyObject)}
+                onChange={(e) => props.callBack(props.keyObject, e.target.value)}>
                 {
                     props.options.map((option, i) =>
                         <option key={i} value={option} >{option}</option>

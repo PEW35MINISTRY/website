@@ -2,7 +2,10 @@
 
 #feedback-submitted {
     width: 100vw;
+    max-width: max(700px, 90vw);
     text-align: center;
+    margin: auto;
+    padding: 0.5rem;
 
     h3 {
         margin: auto;
@@ -11,19 +14,47 @@
         // background-color: $t-black;
         color: $blue-dark;
 
-        //Outline Animation
-        background-repeat: no-repeat;
-        background-image: linear-gradient(to right, $blue 100%, $blue 100%),
-            linear-gradient(to bottom, $blue 100%, $blue 100%),
-            linear-gradient(to right, $blue 100%, $blue 100%),
-            linear-gradient(to bottom, $blue 100%, $blue 100%);
-        background-position: 0 0,
-            100% 0,
-            100% 100%,
-            0 100%;
-
-        animation: trace 4s cubic-bezier(0.19, 1, 0.22, 1) infinite;
+        
     }
+
+    &.fail {
+        h3 {
+            color: $red;
+        }
+
+        h5 {
+            color: $blue-dark;
+            font-size: 1.0rem;
+        }
+
+        div {
+            display: flex;
+            justify-content: space-around;
+            flex-direction: row;
+
+            strong {
+                font-size: 3rem;
+                color: $red;
+            }
+
+            img {
+                height: 2.5rem;
+            }
+        }
+    }
+
+    //Outline Animation
+    background-repeat: no-repeat;
+    background-image: linear-gradient(to right, $blue 100%, $blue 100%),
+        linear-gradient(to bottom, $blue 100%, $blue 100%),
+        linear-gradient(to right, $blue 100%, $blue 100%),
+        linear-gradient(to bottom, $blue 100%, $blue 100%);
+    background-position: 0 0,
+        100% 0,
+        100% 100%,
+        0 100%;
+
+    animation: trace 4s cubic-bezier(0.19, 1, 0.22, 1) infinite;
 }
 
 #feedback {

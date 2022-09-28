@@ -11,7 +11,7 @@ const Pages = () => {
             <h2>Key Features</h2>
             <div id="pages-wrapper">
                 {CONTENT.pages.map((page, i) =>
-                    <div className={`page ${(i % 2) ? 'left-order' : 'right-order'}`} >
+                    <div key={i} className={`page ${(i % 2) ? 'left-order' : 'right-order'}`} >
                         <div className="info">
                             <h3>{page.title}</h3>
                             <div>
