@@ -245,7 +245,7 @@ const Prompt = ({ ...props }: { prompt: string, note?: string | null, }) => {
     return (
         <div className='label-box'>
             <label htmlFor={String(props.prompt)}>{props.prompt}</label>
-            <h6 className={props.note && props.note == 'Required' || props.note?.toLowerCase().includes('invalid') ? 'required' : props.note ? '' : 'none'}>{props.note}</h6>
+            <strong className={props.note && props.note == 'Required' || props.note?.toLowerCase().includes('invalid') ? 'required' : props.note ? '' : 'none'}>{props.note}</strong>
         </div>
     );
 }

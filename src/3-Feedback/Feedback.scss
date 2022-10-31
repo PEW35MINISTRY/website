@@ -182,11 +182,14 @@
                     align-items: baseline;
                     justify-content: space-between;
 
-                    h6 {
+                    strong {
+                        font-family: 'Roboto';
+                        font-weight: 300;
                         font-size: 0.65rem;
                         letter-spacing: 0.05rem;
                         color: $t-black;
                         margin: 0 1.0rem;
+                        
                     }
 
                     .required {
