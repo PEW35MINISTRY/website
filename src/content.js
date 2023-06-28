@@ -9,8 +9,8 @@ export default {
     "goal":"Providing a platform to connect students in one on one prayer partnerships, and to send students content base on their age, gender, and walk with Christ.",
 
     "update":{
-        "title":"Stage 1 of Development",
-        "subtitle" :"Expected release: Spring 2023",
+        "title":"Stage 12 of Development",
+        "subtitle" :"A Growing Foundation and Accelerating Progress",
         "cardPrompt": "The Progress"
     },
 
@@ -52,8 +52,8 @@ export default {
         {
             "prompt":"The Progress",
             "image":require("./0-Assets/card-progress.jpg"),
-            "description":"We are just getting started laying out the foundational designs and recruiting a team of talented individuals for this great venture.",
-            "header":"Stage 1 of Development:",
+            "description":"We are making great headway and recently have hired an additional developer.  The profile pages and account authentication processes are wrapping up.  Next sections will be developing that chat and prayer request interfaces.",
+            "header":"Accelerating Progress:",
         }
     ],
 

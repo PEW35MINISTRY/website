@@ -1,5 +1,5 @@
 # Encouraging Prayer
-Site is live at: Learn More at: [encouragingprayer.org](https://encouragingprayer.org/)
+Site is live at: [encouragingprayer.org](https://encouragingprayer.org/)
 
 
 The **Encouraging Prayer Mobile Application** will connect students in prayer partnerships and provide Christian youth group communication, event sharing, and curated media content.
