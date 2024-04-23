@@ -59,8 +59,8 @@ const Header = () => {
                         <h4>{CONTENT.update.subtitle}</h4>
                         <div className="button-box">
                             <button id="secondary" onClick={() => updateHandler()}>Latest Update</button>
-                            <a href='#feedback'>
-                                <button id="primary">Give Feedback</button>
+                            <a href='#subscribe'>
+                                <button id="primary">Subscribe</button>
                             </a>
                         </div>
                     </div>
@@ -74,11 +74,13 @@ const Header = () => {
 
             {/* Absolute Elements */}
             <div className="menu-box">
-                <a href='#pages' className='hide-mobile'>Design</a>
-                <a href='#feedback'>Feedback</a>
-                <a href='#technical' className='hide-mobile'>Technical</a>
-                <a href='https://pew35.org/support'>
-                    <button>SUPPORT</button>
+                {/* <a href='#pages' className='hide-mobile'>Design</a> */}
+                {/* <a href='#feedback'>Feedback</a> */}
+                {/* <a href='#technical' className='hide-mobile'>Technical</a> */}
+                <a href='#subscribe' className='hide-mobile'>Subscribe</a>
+                <a href='https://pew35.org/support'>Support</a>
+                <a href='/login'>
+                    <button>Portal Login</button>
                 </a>
             </div>
 

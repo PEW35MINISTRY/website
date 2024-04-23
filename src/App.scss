@@ -1,0 +1,26 @@
+@import './index.scss';
+
+.popup-outer-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    z-index: 10;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: $t-black;
+    border-radius: 0;
+
+    .popup-inner-wrapper {
+        position: relative;
+        padding: 2.0rem;
+        border-radius: calc(2 * $radius);
+        box-shadow: calc(3 * $radius) calc(4 * $radius) $t-black;
+        min-width: 40vw;
+        max-width: min(600px, 80vw);
+        overflow-x: hidden;
+        background-color: white;
+    }
+}

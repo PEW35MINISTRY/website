@@ -9,8 +9,8 @@ export default {
     "goal":"Providing a platform to connect students in one on one prayer partnerships, and to send students content base on their age, gender, and walk with Christ.",
 
     "update":{
-        "title":"Stage 12 of Development",
-        "subtitle" :"A Growing Foundation and Accelerating Progress",
+        "title":"Stage 101 of Development",
+        "subtitle" :"Designing Partnership Matching",
         "cardPrompt": "The Progress"
     },
 
@@ -52,8 +52,8 @@ export default {
         {
             "prompt":"The Progress",
             "image":require("./0-Assets/card-progress.jpg"),
-            "description":"We are making great headway and recently have hired an additional developer.  The profile pages and account authentication processes are wrapping up.  Next sections will be developing that chat and prayer request interfaces.",
-            "header":"Accelerating Progress:",
+            "description":"Our app's final touches are underway! We're integrating partnership matching and notifications, bringing us closer to completion. Stay tuned for an enhanced user experience that facilitates seamless connections and timely updates.",
+            "header":"Finishing Touches:",
         }
     ],
 
@@ -98,6 +98,8 @@ export default {
 
 
     "feedback": {
+
+        "title":"Feedback",
 
         "cors-proxy":"https://cors-anywhere.herokuapp.com/",   //TODO: Temporary Proxy
 
@@ -301,6 +303,30 @@ export default {
                         "prompt":"Are we on the right track?",
                     }
                 ]
+            }
+        ]
+    },
+
+    "subscription":{
+        "title":"Subscribe for Updates",
+        
+        "email-formID":"email",
+
+        "questions":[
+            {
+                "formID":"role",
+                "type":"option",
+                "prompt":"Which role fits you?",
+                "options":[
+                    "User",
+                    "Leader",
+                    "Financial Supporter"
+                ]
+            },
+            {
+                "formID":"note",
+                "type":"paragraph",
+                "prompt":"How can our team pray for you today?",
             }
         ]
     },

@@ -2,7 +2,9 @@ $background: whitesmoke;
 $red: #B12020;
 $blue: #62D0F5;
 $blue-dark: #003f89;
-$t-black: rgba(0, 0, 0, 0.6);
+$gray-dark: #303030;
+$gray-light: #A9A9A9;
+$t-black: rgba(0, 0, 0, 0.5);
 $t-white: rgba(255, 255, 255, 0.2);
 $radius: 4px;
 
@@ -32,10 +34,6 @@ html {
 body {
   margin: 0;
   overflow: hidden;
-}
-
-#App {
-  // margin: auto;
 }
 
 .none {
@@ -69,7 +67,7 @@ div {
 }
 
 button {
-  padding: 0.5rem 1.0rem;
+  padding: 0.15rem 1.0rem;
   font-family: 'EB Garamond';
   font-weight: 600;
   font-size: 1.3rem;
