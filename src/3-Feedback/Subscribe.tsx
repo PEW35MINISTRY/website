@@ -10,6 +10,7 @@ const Subscribe = (props:{expandQuestions?:boolean, onSuccess?:() => void, onCan
     const reCaptchaRef = useRef<ReCAPTCHA | null>(null);
 
     const [expandQuestions, setExpandQuestions] = useState<boolean>(props.expandQuestions ?? true);
+    const [confirmationMessage, setConfirmationMessage] = useState<string|undefined>(undefined);
     const [responseMap, setResponseMap] = useState<Map<string, string>>(new Map());
     const emailResponse:FeedbackResponseItem = { uid: '[1]-Email', formID: CONTENT.subscription['email-formID'], prompt:'Email:' };
 
@@ -27,11 +28,13 @@ const Subscribe = (props:{expandQuestions?:boolean, onSuccess?:() => void, onCan
         responseMap.forEach((value:string, stringifiedItem:string) => jsonBody[JSON.parse(stringifiedItem).formID] = value);        
         
         axios.post(`${process.env.REACT_APP_DOMAIN}/subscribe`,jsonBody)
-            .then((response) => { setResponseMap(new Map());
-                if(props.onSuccess)props.onSuccess(); })
+            .then((response) => { 
+                setConfirmationMessage('Subscription Successful!');
+                setResponseMap(new Map());
+                props.onSuccess && props.onSuccess(); })
             .catch((error) => {
                 console.error('Error Subscribing:', error, jsonBody);
-                props.onCancel && props.onCancel();
+                setConfirmationMessage('Invalid, Select all Inputs');
             });
     }
 
@@ -50,13 +53,16 @@ const Subscribe = (props:{expandQuestions?:boolean, onSuccess?:() => void, onCan
                     CONTENT.subscription.questions.map((details, i) => getInput({ ...details, type: details.type, keyObject: {uid: `question-${i}`, formID: details.formID, prompt: details.prompt}, valueCallback: getResponse, callBack: handleResponse }))
                 }
             </div>
-            <div className='submit-box'>
+            <div className='submit-box'>                
                 <ReCAPTCHA
                     // className={recaptchaClass}
                     sitekey={process.env.REACT_APP_recaptchaKey || 'Key'}
                     size='invisible'
                     ref={reCaptchaRef}
                 />
+                {confirmationMessage && 
+                    <label id='confirmation' >{confirmationMessage}</label>}
+
                 {(props.onCancel !== undefined) &&
                     <button id='cancel-button' onClick={props.onCancel}>Cancel</button>}
 
