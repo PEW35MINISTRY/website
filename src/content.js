@@ -9,8 +9,8 @@ export default {
     "goal":"Providing a platform to connect students in one on one prayer partnerships, and to send students content base on their age, gender, and walk with Christ.",
 
     "update":{
-        "title":"Stage 101 of Development",
-        "subtitle" :"Designing Partnership Matching",
+        "title":"Stage of Development",
+        "subtitle" :"Beta Testing",
         "cardPrompt": "The Progress"
     },
 
@@ -346,33 +346,47 @@ export default {
         }
     ],
 
+    "documents": {
+        "title": "Policies",
+        "references": [
+            {
+                "name":"Terms of Use",
+                "link":"https://ep-cdn-data-prod.s3.us-east-2.amazonaws.com/EP_Terms_Of_Use.pdf"
+            },
+            {
+                "name":"Privacy Policy",
+                "link":"https://ep-cdn-data-prod.s3.us-east-2.amazonaws.com/EP_Privacy_Policy.pdf"
+            },
+            {
+                "name":"Youth Protection",
+                "link":"https://ep-cdn-data-prod.s3.us-east-2.amazonaws.com/EP_Youth_Protection_Policy.pdf"
+            },
+            {
+                "name":"Delete Account",
+                "link":"/delete-account"
+            }
+        ]
+    },
+
     "information": {
         "title": "Our Ministry",
         "references": [
             {
-                "name":"Day of Prayer",
-                "link":"https://pew35.org/dayofprayer"
-            },
-            {
-                "name":"Mission Statement",
-                "link":"https://pew35.org/mission"
-            },
-            {
-                "name":"Vision Statement",
-                "link":"https://pew35.org/vision"
-            },
-            {
-                "name":"Doctrinal Statement",
-                "link":"https://pew35.org/doctrinal"
+                "name":"Elevate",
+                "link":"https://pew35.org/elevate/"
             },
             {
                 "name":"About Pew35",
-                "link":"https://pew35.org/about"
+                "link":"https://pew35.org/mission-and-vision"
             },
             {
-                "name":"FAQs",
-                "link":"https://pew35.org/faq"
-            }
+                "name":"Our Team",
+                "link":"https://pew35.org/mission-and-vision/#team"
+            },
+            {
+                "name":"Donate",
+                "link":"https://secure.qgiv.com/for/p3gf"
+            },
         ]
     }
 }

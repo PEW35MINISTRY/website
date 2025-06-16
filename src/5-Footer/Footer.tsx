@@ -13,7 +13,7 @@ const Footer = () => {
     useEffect(() => {
         setTimeout(()=> {
         if (footerRef.current && footerShapeRef.current) {
-            setRectangleHeight(footerRef.current.offsetHeight - footerShapeRef.current.offsetHeight);
+            setRectangleHeight(footerRef.current.offsetHeight - footerShapeRef.current.offsetHeight + 10); //10px overlap vertically
         }}, 300);
     }, [footerRef.current, footerShapeRef.current]);
 
@@ -23,6 +23,13 @@ const Footer = () => {
                 <a href='https://pew35.org/'>
                     <img id="pew35-logo" src={PEW35LOGO} alt="Pew35" />
                 </a>
+                <div id="documents">
+                    <h3>{CONTENT.documents.title}</h3>
+                    {
+                        CONTENT.documents.references.map((reference, i) =>
+                            <a key={i} href={reference.link}><h4 >{reference.name}</h4></a>)
+                    }
+                </div>
                 <div id="references">
                     <h3>{CONTENT.information.title}</h3>
                     {

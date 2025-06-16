@@ -31,6 +31,7 @@ const Subscribe = (props:{expandQuestions?:boolean, onSuccess?:() => void, onCan
             .then((response) => { 
                 setConfirmationMessage('Subscription Successful!');
                 setResponseMap(new Map());
+                localStorage.setItem('subscribe-hide', 'true');
                 props.onSuccess && props.onSuccess(); })
             .catch((error) => {
                 console.error('Error Subscribing:', error, jsonBody);
