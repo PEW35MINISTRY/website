@@ -358,6 +358,10 @@ export default {
                 "link":"https://ep-cdn-data-prod.s3.us-east-2.amazonaws.com/EP_Privacy_Policy.pdf"
             },
             {
+                "name":"Child Safety Policy",
+                "link":"/child-safty-policy"
+            },
+                        {
                 "name":"Youth Protection",
                 "link":"https://ep-cdn-data-prod.s3.us-east-2.amazonaws.com/EP_Youth_Protection_Policy.pdf"
             },
