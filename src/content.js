@@ -359,7 +359,7 @@ export default {
             },
             {
                 "name":"Child Safety Policy",
-                "link":"/child-safty-policy"
+                "link":"/child-safety-policy"
             },
                         {
                 "name":"Youth Protection",
