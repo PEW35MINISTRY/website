@@ -40,7 +40,7 @@ const Footer = () => {
 
 
             </div>
-            <img id="pew35-slogan" src={SLOGAN} alt="Slogan" />
+            {/* <img id="pew35-slogan" src={SLOGAN} alt="Slogan" /> */}
 
             <div id="footer-background">
                 <div id='footer-shape' ref={footerShapeRef}>

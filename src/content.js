@@ -52,8 +52,8 @@ export default {
         {
             "prompt":"The Progress",
             "image":require("./0-Assets/card-progress.jpg"),
-            "description":"Our app's final touches are underway! We're integrating partnership matching and notifications, bringing us closer to completion. Stay tuned for an enhanced user experience that facilitates seamless connections and timely updates.",
-            "header":"Finishing Touches:",
+            "description": "Our app has entered beta testing! Real users are exploring new features and sharing feedback, helping us fine-tune performance. This stage brings us even closer to launch with smoother connections and reliable updates for everyone.",
+            "header":"Beta Trials:",
         }
     ],
 
@@ -355,7 +355,7 @@ export default {
             },
             {
                 "name":"Privacy Policy",
-                "link":"https://ep-cdn-data-prod.s3.us-east-2.amazonaws.com/EP_Privacy_Policy.pdf"
+                "link":"/privacy-policy"
             },
             {
                 "name":"Child Safety Policy",
