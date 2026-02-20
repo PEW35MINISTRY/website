@@ -8,6 +8,7 @@ import Feedback from './3-Feedback/Feedback';
 import Technical from './4-Technical/Technical';
 import Footer from './5-Footer/Footer';
 import Subscribe from './3-Feedback/Subscribe';
+import Support from './5-Footer/Support';
 
 const App = () => {
   const [showSubscribe, setShowSubscribe] = useState<boolean>(false);
@@ -24,6 +25,7 @@ const App = () => {
         {/* <Feedback /> */}
         <Subscribe expandQuestions={false} />
         {/* <Technical /> */}
+        <Support />
         <Footer />
   
       {showSubscribe && 

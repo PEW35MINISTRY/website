@@ -3,6 +3,8 @@ import CONTENT from '../content';
 
 import './Header.scss';
 import ABSTRACT from '../0-Assets/square-abstract.png';
+import IOS_ICON from '../0-Assets/icon-ios-apple-white.png';
+import ANDROID_ICON from '../0-Assets/icon-android-white.png';
 import Demo from './Demo';
 
 const Header = () => {
@@ -54,13 +56,25 @@ const Header = () => {
                         <h3 className="goal">{CONTENT.goal}</h3>
                     </h2>
 
-                    <div id="stage-banner">
+                    {/* <div id="stage-banner">
                         <h3 >{CONTENT.update.title}</h3>
                         <h4>{CONTENT.update.subtitle}</h4>
                         <div className="button-box">
                             <button id="secondary" onClick={() => updateHandler()}>Latest Update</button>
                             <a href='#subscribe'>
                                 <button id="primary">Subscribe</button>
+                            </a>
+                        </div>
+                    </div> */}
+
+                    <div id="download-banner">
+                        <h3 >Download the App</h3>
+                        <div id="button-box">
+                            <a href={process.env.REACT_APP_IOS_LINK}>
+                                <button id="primary"><img src={IOS_ICON} alt="iOS Icon" />IOS</button>
+                            </a>
+                            <a href={process.env.REACT_APP_ANDROID_LINK}>
+                                <button id="primary"><img src={ANDROID_ICON} alt="Android Icon" />ANDROID</button>
                             </a>
                         </div>
                     </div>
@@ -78,7 +92,7 @@ const Header = () => {
                 {/* <a href='#feedback'>Feedback</a> */}
                 {/* <a href='#technical' className='hide-mobile'>Technical</a> */}
                 <a href='#subscribe' className='hide-mobile'>Subscribe</a>
-                <a href='https://pew35.org/support'>Support</a>
+                <a href='#support'>Contact Support</a>
                 <a href='/login'>
                     <button>Portal Login</button>
                 </a>

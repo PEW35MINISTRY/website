@@ -96,7 +96,7 @@
                 }
             }
 
-            #stage-banner {
+            #stage-banner, #download-banner {
                 position: relative;
                 bottom: -3rem;
                 margin: 4.0rem 0 0 -5vw;
@@ -124,29 +124,36 @@
                     margin: 0.5rem;
                 }
 
-                #primary {
-                    background-color: $red;
-                    border: 2px solid transparent;
-                    color: white;
-                    margin: 0 0.5rem;
+                #button-box {
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: flex-end;
+                    flex-wrap: nowrap;
+                    margin-top: 1.0rem;
 
-                    &:hover {
-                        background-color: $t-black;
-                        color: $blue;
-                    }
-                }
-
-                #secondary {
-                    border: 2px solid $t-white;
-                    color: white;
-                    margin: 0 0.5rem;
-
-                    &:hover {
+                    #primary {
+                        background-color: $red;
                         border: 2px solid transparent;
-                        background-color: $t-black;
+                        color: white;
+                        margin: 0 0.5rem;
+
+                        &:hover {
+                            background-color: $t-black;
+                            color: $blue;
+                        }
+                    }
+
+                    #secondary {
+                        border: 2px solid $t-white;
+                        color: white;
+                        margin: 0 0.5rem;
+
+                        &:hover {
+                            border: 2px solid transparent;
+                            background-color: $t-black;
+                        }
                     }
                 }
-
             }
         }
 
@@ -353,6 +360,10 @@
         z-index: 10;
         top: 1rem;
         right: 2rem;
+
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
 
         a,
         button {

@@ -331,6 +331,14 @@ export default {
         ]
     },
 
+    "support":{
+        "title":"Need assistance?",
+        
+        "email":"support@encouragingprayer.org",
+
+        "subText":"We respond within 24 hours, and we would love to hear from you!"
+    },
+
     "technical":[
         {
             "name":"Mobile App Outline",
