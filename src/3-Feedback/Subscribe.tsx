@@ -8,6 +8,7 @@ import './Feedback.scss';
 
 const Subscribe = (props:{expandQuestions?:boolean, onSuccess?:() => void, onCancel?:() => void}) => {
     const reCaptchaRef = useRef<ReCAPTCHA | null>(null);
+    const [reCaptchaToken, setReCaptchaToken] = useState<string | null>(null);
 
     const [expandQuestions, setExpandQuestions] = useState<boolean>(props.expandQuestions ?? true);
     const [confirmationMessage, setConfirmationMessage] = useState<string|undefined>(undefined);
@@ -23,6 +24,11 @@ const Subscribe = (props:{expandQuestions?:boolean, onSuccess?:() => void, onCan
 
 
     const onSubscribe = () => {
+        if(reCaptchaToken == null) {
+            setConfirmationMessage('Please complete the ReCaptcha');
+            return;
+        }
+
         const jsonBody:Object = {};
         //@ts-ignore        
         responseMap.forEach((value:string, stringifiedItem:string) => jsonBody[JSON.parse(stringifiedItem).formID] = value);        
@@ -54,13 +60,16 @@ const Subscribe = (props:{expandQuestions?:boolean, onSuccess?:() => void, onCan
                     CONTENT.subscription.questions.map((details, i) => getInput({ ...details, type: details.type, keyObject: {uid: `question-${i}`, formID: details.formID, prompt: details.prompt}, valueCallback: getResponse, callBack: handleResponse }))
                 }
             </div>
-            <div className='submit-box'>                
+            {validateEmail(getResponse(emailResponse)) &&
                 <ReCAPTCHA
-                    // className={recaptchaClass}
-                    sitekey={process.env.REACT_APP_recaptchaKey || 'Key'}
-                    size='invisible'
+                    className='recaptcha'
+                    sitekey={process.env.REACT_APP_RECAPTCHA_KEY || 'Key'}
                     ref={reCaptchaRef}
-                />
+                    onChange={setReCaptchaToken}
+                    onExpired={() => setReCaptchaToken(null)}
+                />}
+            <div className='submit-box'>                
+
                 {confirmationMessage && 
                     <label id='confirmation' >{confirmationMessage}</label>}
 
