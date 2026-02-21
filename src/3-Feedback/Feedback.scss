@@ -168,6 +168,8 @@
         }
 
         #cancel-button {
+            display: block;
+            text-align: center;
             background-color: transparent;
             border: 1px solid $blue;
             color: $blue;
