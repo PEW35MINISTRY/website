@@ -187,12 +187,6 @@ const Feedback = () => {
                             }
                         </div>
                         <div className="submit-box">
-                            <ReCAPTCHA
-                                // className={recaptchaClass}
-                                sitekey={process.env.REACT_APP_recaptchaKey || 'Key'}
-                                size="invisible"
-                                ref={reCaptchaRef}
-                            />
                             <button id="submit" onClick={handleSubmit}>Send Feedback</button>
                         </div>
 
